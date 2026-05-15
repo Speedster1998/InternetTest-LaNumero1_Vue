@@ -1,0 +1,10 @@
+# Omitir dependencias de Node
+**/node_modules/
+node_modules/
+
+# Omitir variables de entorno (Seguridad)
+.env
+
+# Archivos de logs
+npm-debug.log*
+yarn-error.log*

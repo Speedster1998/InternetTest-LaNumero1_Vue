@@ -1,0 +1,135 @@
+.settings-card {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.setting-group {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.setting-group label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  font-size: 12.5pt;
+  color: #333;
+}
+
+select{
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  
+  padding: 12px 15px;
+  width: 100%;
+  border: 1.5px solid #b2b2b2;
+  border-radius: 8px;
+  background-color: white;
+  font-size: 1rem;
+  color: #333;
+  cursor: pointer;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 18px;
+  
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+select:focus {
+  outline: none;
+  border-color: #0070f3;
+}
+
+.btn-save {
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  transition: background 0.3s ease;
+}
+
+.btn-save:hover {
+  background-color: #0051ad;
+}
+
+/* Contenedor del Pop-up */
+.modal-content.success-popup {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+  max-width: 400px;
+  width: 70%;
+  height: 37%;
+}
+
+/* --- ESTILOS DEL ICONO SVG VERDE --- */
+.success-icon-container {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+}
+
+.success-icon-svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* El círculo verde */
+.success-icon-circle {
+  stroke: #28a745;
+  stroke-width: 2;
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke-linecap: round;
+  animation: stroke-circle 0.6s ease-in-out forwards;
+}
+
+/* El check verde */
+.success-icon-check {
+  stroke: #28a745;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: stroke-check 0.3s 0.6s ease-in-out forwards;
+}
+
+/* Botón Aceptar Verde */
+.btn-success {
+  background-color: #28a745 !important;
+  color: white;
+  border: none;
+  padding: 10px 20px !important;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-size: 1.1rem;
+}
+
+.btn-success:hover {
+  background-color: #218838 !important;
+}
+
+/* --- ANIMACIONES --- */
+@keyframes stroke-circle {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes stroke-check {
+  to { stroke-dashoffset: 0; }
+}

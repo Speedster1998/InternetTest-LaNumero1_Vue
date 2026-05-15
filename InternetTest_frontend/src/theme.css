@@ -1,0 +1,405 @@
+:root {
+  --primary: #0070f3;
+  --success: #0070e0;
+  --error: #ff0000;
+  --bg: #f4f7f6;
+}
+
+html, body, #app {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%; /* Importante para el centrado vertical */
+  min-height: 100vh;
+  /* Eliminamos el suavizado agresivo de Vite para arreglar la fuente */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-image: url("./Images/Networks_background.jpg");
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow-x: hidden;
+  transition: min-height 0.4s ease;
+}
+
+/* EL CENTRADOR: Cambiamos #root por #app */
+#app {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+  box-sizing: border-box;
+}
+
+
+h1{
+  font-size: 32pt;
+  margin-top: 0px;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  letter-spacing: -0.05em;
+}
+
+h2{
+  margin-bottom: 8px;
+}
+
+h1,h2{
+  font-weight: 600;
+}
+
+p {
+  margin: 0;
+  color: #555;
+  font-size: 12.5pt;
+}
+
+a{
+  text-decoration: none;
+  color: #333;
+}
+
+a:hover{
+  background: #f5f5f5;
+  color: #007bff;
+}
+
+#lanumero1{
+  margin-top: 0;
+  margin-bottom: -15px;
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.container {
+  background-color: white;
+  padding-top: 1.35rem;
+  padding-bottom: 2.5rem;
+  padding-right: 2.5rem;
+  padding-left: 2.5rem;
+  border-radius: 25px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  text-align: center;
+  width: 90%;
+  max-width: 500px;
+  box-sizing: border-box;
+
+  /* NOTA: Que no se pase del alto de la pantalla en laptops 14" */
+  height: auto;
+  max-height: 785px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  transition: all 0.5s ease;
+  z-index: 10;
+}
+
+.container.dashboard-mode {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(10px);
+  padding-top: 2.5rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  margin-top: 55px; /* Para que no lo tape la navbar */
+}
+
+button {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 15px;
+  margin-bottom: 12px;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+button:hover:not(:disabled) {
+  background-color: #0051ad;
+  transform: translateY(-2px);
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.dashboard-view {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* --- HEADER DEL DASHBOARD (Logo y Logout) --- */
+.global-navbar {
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 65px;
+  background-color: white;
+  z-index: 1000;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.nav-content {
+  width: 100%;
+  max-width: none !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 clamp(15px, 5vw, 100px);
+  max-width: 1800px; 
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.header-left, .header-right {
+  flex: 1; /* Esto hace que los lados ocupen el mismo espacio */
+  display: flex;
+}
+
+.header-right {
+  justify-content: flex-end;
+}
+
+.header-center {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+}
+
+.main-logo {
+  width: 125px;
+  margin: auto;
+  display: block;
+}
+
+/* --- BOTÓN MENÚ PARRILLA --- */
+.menu-grid-btn {
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  padding: 5px;
+  width: auto !important;
+  margin: 0 !important;
+}
+
+.menu-grid-btn:hover {
+  background-color: transparent !important;
+  color: var(--primary);
+  transform: scale(1.1);
+}
+
+.logout-circle-btn {
+  background-color: #ff4d4d;
+  border: none;
+  width: 40px !important; /* Forzamos tamaño cuadrado */
+  height: 40px !important;
+  border-radius: 50% !important; /* Círculo perfecto */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.logout-circle-btn:hover {
+  background-color: #b73939 !important;
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* NOTA: Asegúrate de que el contenedor tenga posición relativa */
+.test-screen {
+  position: relative;
+}
+
+/* --- MODAL --- */
+/* Ventana de confirmación de cierre de sesión */
+/* Fondo oscuro detrás del modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(4px);
+}
+
+/* La caja del mensaje */
+.modal-content {
+  background: white;
+  padding-top: 18px;
+  padding-bottom: 18px;
+  padding-right: 30px;
+  padding-left: 30px;
+  border-radius: 25px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  max-width: 400px;
+  width: 70%;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+
+.btn-confirm {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 10px 20px !important;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-confirm:hover{
+  background-color: #b73939 !important;
+}
+
+.btn-cancel {
+  background-color: #eee;
+  color: #333;
+  border: none;
+  padding: 10px 20px !important;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-cancel:hover{
+  background-color: #d2d2d2 !important;
+}
+
+/* --- DISEÑO RESPONSIVO (Móviles / Laptops 14") --- */
+@media (max-width: 480px) {
+  #app {
+    padding-top: 0.5vh;
+  }
+}
+
+@media (max-height: 768px) {
+  h1 {
+    font-size: 26pt !important;
+  }
+  img {
+    max-width: 185px !important;
+  }
+  .container {
+    padding-top: 1.25rem;
+    padding-bottom: 1.5rem;
+    padding-right: 1.6rem;
+    padding-left: 1.6rem;
+    width: 92%;
+  }
+  .container.dashboard-mode{
+    padding-top: 2.15rem !important;
+  }
+}
+
+/* --- MENÚ DESPLEGABLE --- */
+/* Capa oscura de fondo */
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 999;
+}
+
+/* El Sidebar */
+.sidebar-menu {
+  position: fixed;
+  top: 0;
+  left: -350px; /* Escondido por defecto */
+  width: 300px;
+  height: 100vh;
+  margin: 0;
+  background: white;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+  transition: left 0.3s ease-in-out;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border: none;
+  outline: none;
+}
+
+.sidebar-menu.is-open {
+  left: 0;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 20px 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.sidebar-logo {
+  max-width: 150px; 
+  height: auto;
+  object-fit: contain;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 28px;
+  padding: 5px;
+  cursor: pointer;
+  color: black;
+}
+
+.close-btn:hover{
+  color: #666 !important;
+  background-color: white !important;
+}
+
+.sidebar-links {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar-links li {
+  padding: 15px 10px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  font-weight: 500;
+  color: #333;
+}
+
+.sidebar-links li:hover {
+  background: #f5f5f5;
+  color: #007bff;
+}

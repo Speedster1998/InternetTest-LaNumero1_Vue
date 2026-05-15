@@ -1,0 +1,165 @@
+.result {
+  padding: 11.5px;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  border-radius: 25px;
+}
+
+.status-label-static {
+  color: rgb(60, 60, 60);
+}
+
+.status-low { color: #ff4d4d; }
+.status-mod { color: #e19200; }
+.status-opt { color: #2ecc71; }
+.status-exc { color: #0070f3; }
+
+/* El contenedor del spinner para centrarlo */
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+/* El círculo animado */
+.loader {
+  display: block;
+  margin: auto;
+  border: 4px solid #f3f3f3; /* Color de fondo del círculo */
+  border-top: 4px solid #0070f3; /* Color de la parte que gira */
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+}
+
+/* Definición de la animación */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 10px;
+}
+
+/* --- MÉTRICA DEL PING --- */
+.metrics-row {
+  padding: 4px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.metrics-row p {
+  margin: 0;
+  font-size: 11.5pt;
+  color: #555;
+}
+
+.speed-value {
+  font-size: 2.1rem;
+}
+
+.gauge-container {
+  width: 200px;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.gauge-body {
+  width: 160px;
+  height: 80px; /* Mitad del ancho para hacer el semicírculo */
+  background: #eee;
+  border-radius: 100px 100px 0 0; /* Semicírculo superior */
+  position: relative;
+  border-bottom: 5px solid var(--primary);
+  background-image: conic-gradient(
+    from 270deg at 50% 100%,
+    
+    /* 0 Mbps (Gruesa) */
+    #909090 0deg, #909090 1.5deg,
+    transparent 1.5deg 18deg,
+    
+    /* 20 y 40 Mbps (Finas) */
+    #7a7b7d 18deg, #7a7b7d 18.5deg, /* Usamos .5deg para marcas finas */
+    transparent 18.5deg 36deg,
+    #7a7b7d 36deg, #7a7b7d 36.5deg,
+    transparent 36.5deg 54deg,
+    
+    /* 60 y 80 Mbps (Finas) */
+    #7a7b7d 54deg, #7a7b7d 54.5deg,
+    transparent 54.5deg 72deg,
+    #7a7b7d 72deg, #7a7b7d 72.5deg,
+    transparent 72.5deg 89deg,
+    
+    /* 100 Mbps (Gruesa - En el centro) */
+    #909090 89deg, #909090 91deg, 
+    transparent 91deg 108deg,
+    
+    /* 120 y 140 Mbps (Finas) */
+    #7a7b7d 108deg, #7a7b7d 108.5deg,
+    transparent 108.5deg 126deg,
+    #7a7b7d 126deg, #7a7b7d 126.5deg,
+    transparent 126.5deg 144deg,
+    
+    /* 160 y 180 Mbps (Finas) */
+    #7a7b7d 144deg, #7a7b7d 144.5deg,
+    transparent 144.5deg 162deg,
+    #7a7b7d 162deg, #7a7b7d 162.5deg,
+    transparent 162.5deg 179deg,
+    
+    /* 200 Mbps (Gruesa - Final) */
+    #909090 179deg, #909090 181deg
+  );
+}
+
+/* Para que las rayas no lleguen hasta el centro y parezca un reloj real */
+.gauge-body::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 15px;
+  right: 15px;
+  height: 68px;
+  background: #eee; /* Esto "tapa" el centro del gradiente */
+  border-radius: 100px 100px 0 0;
+  z-index: 1;
+}
+
+.gauge-needle {
+  width: 4px;
+  height: 58px;
+  background: #333;
+  position: absolute;
+  bottom: 0;
+  left: calc(50% - 1.5px);
+  transform-origin: bottom center; /* Rota desde la base */
+  transform: rotate(0deg);
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 2;
+}
+
+/*.gauge-center {
+  width: 12px;
+  height: 12px;
+  background: #333;
+  border-radius: 50%;
+  position: absolute;
+  bottom: -7px;
+  left: calc(50% - 7.5px);
+  z-index: 3;
+}*/
+
+@media (max-height: 768px) {
+  .gauge-container {
+    margin: 10px auto;
+  }
+}
