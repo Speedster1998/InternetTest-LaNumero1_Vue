@@ -2,6 +2,10 @@
 **/node_modules/
 node_modules/
 
+# Ignorar carpetas de distribución/compilación de Vue
+**/dev-dist/
+**/dist/
+
 # Omitir variables de entorno (Seguridad)
 .env
 
