@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
-import Login from './components/Login/Login.vue';
-import InternetTest from './components/InternetTest/InternetTest.vue';
+import Login from './pages/Login/Login.vue';
+import InternetTest from './pages/InternetTest/InternetTest.vue';
 
 const isRegistered = ref(!!localStorage.getItem('userName'));
 

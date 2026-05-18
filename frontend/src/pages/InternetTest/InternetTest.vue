@@ -1,8 +1,8 @@
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue';
-import { watch } from 'vue';
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import Settings from '../Settings/Settings.vue';
 import HeatMap from '../HeatMap/HeatMap.vue';
+import Header from '../../components/Header/Header.vue';
 import '../InternetTest/InternetTest.css';
 import techImg from '/src/Images/abstract_tech.jpg';
 import { useRegisterSW } from 'virtual:pwa-register/vue'
@@ -377,61 +377,15 @@ const openMiniDashboard = () => {
 </script>
 
 <template>
-  <header v-if="isRegistered" class="global-navbar">
-    <div class="nav-content">
-      <div class="header-left">
-        <button class="menu-grid-btn" @click="isOpenMenu = true">
-          <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
-
-        <div v-if="isOpenMenu" class="menu-overlay" @click="isOpenMenu = false"></div>
-
-        <nav :class="['sidebar-menu', { 'is-open': isOpenMenu }]" ref="menuRef">
-          <div class="sidebar-header">
-            <img src="/La_Numero_1_logo_negro.png" alt="Logo" class="sidebar-logo" />
-            <button class="close-btn" @click="isOpenMenu = false">&times;</button>
-          </div>
-
-          <ul class="sidebar-links">
-            <li v-if="tabActual !== 'test'" @click="tabActual = 'test'; isOpenMenu = false">Test de Velocidad</li>
-            <li v-if="tabActual !== 'mapa'" @click="tabActual = 'mapa'; isOpenMenu = false">Mapa de Calor</li>
-            <li>
-              <a href="https://docs.google.com/spreadsheets/d/1tbrV3TdS-yZvtNG-Tv0XnKayqU5IdllZkisGg_wNkLo/edit?usp=sharing" target="_blank">
-                Reporte del tráfico de datos
-              </a>
-            </li>
-            <li @click="openMiniDashboard(); isOpenMenu = false">
-              Ventana Resumen
-            </li>
-            <li>
-              <a href="https://intranet.grupolanumero1.com.pe/" target="_blank">
-                Intranet La Número 1
-              </a>
-            </li>
-            <li v-if="tabActual !== 'config'" @click="tabActual = 'config'; isOpenMenu = false">Configuración</li>
-          </ul>
-        </nav>
-      </div>
-
-      <div class="header-center">
-        <img src="https://cdn.shopify.com/s/files/1/0383/1984/9609/files/logo-color-lanumero1.png" alt="lanumero1" class="main-logo" />
-      </div>
-
-      <div class="header-right">
-        <button @click="showModal = true" class="logout-circle-btn">
-          <svg viewBox="0 0 24 24" width="18" height="18" stroke="white" stroke-width="2" fill="none">
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-            <polyline points="16 17 21 12 16 7"></polyline>
-            <line x1="21" y1="12" x2="9" y2="12"></line>
-          </svg>
-        </button>
-      </div>      
-    </div>
-  </header>
+  <Header 
+    v-model:tabActual="tabActual"
+    :isRegistered="isRegistered"
+    :speed="speed"
+    :ping="ping"
+    :status="status"
+    @openMiniDashboard="openMiniDashboard"
+    @triggerLogout="showModal = true"
+  />
 
   <div class="container" :class="{ 'dashboard-mode': isRegistered }">
     <div class="dashboard-view">
