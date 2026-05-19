@@ -56,17 +56,43 @@ app.get('/sedes/:id', function(req, res) {
     });
 });
 
-/*
-// Ruta para el Mapa de Calor
-app.get('/api/sedes-mapa', (req, res) => {
-    // Aquí sí traemos todo, incluyendo el color que ya definió el coordinador
-    const sql = "SELECT * FROM sedes WHERE estado = 1";
-    db.query(sql, (err, result) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json(result);
+app.get('/obtener-coordenadas', function(req, res) {
+    const sedeUsuario = req.query.sede;
+
+    const query = `
+        SELECT 
+            s.latitud, 
+            s.longitud, 
+            r.velocidad 
+        FROM registroInternet r
+        INNER JOIN sedes s ON r.base = CONCAT(s.cod_ubi, ' - ', s.lugar)
+        WHERE s.latitud IS NOT NULL AND s.longitud IS NOT NULL
+    `;
+
+    db.query(query, (err, rows) => {
+        if (err) {
+            console.error("Error al obtener coordenadas:", err);
+            return res.status(500).json({ error: "Error en la base de datos" });
+        }
+
+        if (rows.length === 0) {
+            console.log("⚠️ La consulta se ejecutó, pero no trajo ningún registro amarrado.");
+        }
+
+        const puntosCalor = rows.map(row => {
+            let intensidad = 0.2;
+            
+            // LÓGICA DE COLORES: Mayor velocidad -> Mayor intensidad (Calor)
+            if (row.velocidad >= 100) intensidad = 1.0;     // Excelente (Rojo)
+            else if (row.velocidad >= 50) intensidad = 0.7; // Óptima (Naranja)
+            else if (row.velocidad >= 20) intensidad = 0.4; // Moderada (Verde/Lila)
+            else intensidad = 0.1;                          // Baja (Azul)
+
+            return [parseFloat(row.latitud), parseFloat(row.longitud), intensidad];
+        });
+        res.json(puntosCalor);
     });
 });
-*/
 
 app.post('/registrar-test', function(req,res){
     console.log("Llegaron los datos:", req.body);
