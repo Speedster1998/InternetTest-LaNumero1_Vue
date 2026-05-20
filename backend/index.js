@@ -57,15 +57,19 @@ app.get('/sedes/:id', function(req, res) {
 });
 
 app.get('/obtener-coordenadas', function(req, res) {
-    const sedeUsuario = req.query.sede;
+    // El parámetro llega desde el fetch del frontend, aunque por ahora traemos todo y Vue filtra el centro
+    const sedeUsuario = req.query.sede; 
 
     const query = `
         SELECT 
             s.latitud, 
             s.longitud, 
-            r.velocidad 
-        FROM registroInternet r
-        INNER JOIN sedes s ON r.base = CONCAT(s.cod_ubi, ' - ', s.lugar)
+            s.lugar,
+            s.cod_ubi,
+            r.velocidad,
+            r.base
+        FROM sedes s
+        LEFT JOIN registroInternet r ON r.base LIKE CONCAT('%', s.lugar, '%')
         WHERE s.latitud IS NOT NULL AND s.longitud IS NOT NULL
     `;
 
@@ -76,21 +80,10 @@ app.get('/obtener-coordenadas', function(req, res) {
         }
 
         if (rows.length === 0) {
-            console.log("⚠️ La consulta se ejecutó, pero no trajo ningún registro amarrado.");
+            console.log("⚠️ La consulta se ejecutó, pero no trajo ningún registro amarrado con LIKE.");
         }
 
-        const puntosCalor = rows.map(row => {
-            let intensidad = 0.2;
-            
-            // LÓGICA DE COLORES: Mayor velocidad -> Mayor intensidad (Calor)
-            if (row.velocidad >= 100) intensidad = 1.0;     // Excelente (Rojo)
-            else if (row.velocidad >= 50) intensidad = 0.7; // Óptima (Naranja)
-            else if (row.velocidad >= 20) intensidad = 0.4; // Moderada (Verde/Lila)
-            else intensidad = 0.1;                          // Baja (Azul)
-
-            return [parseFloat(row.latitud), parseFloat(row.longitud), intensidad];
-        });
-        res.json(puntosCalor);
+        res.json(rows);
     });
 });
 

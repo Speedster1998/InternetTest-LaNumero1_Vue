@@ -46,7 +46,7 @@ const cambiarTab = (nuevaTab) => {
 
           <ul class="sidebar-links">
             <li v-if="tabActual !== 'test'" @click="cambiarTab('test')">Test de Velocidad</li>
-            <li v-if="tabActual !== 'mapa'" @click="cambiarTab('mapa')">Mapa de Calor</li>
+            <li v-if="tabActual !== 'mapa'" @click="cambiarTab('mapa')">Mapa de Calor (Beta)</li>
             <li>
               <a href="https://docs.google.com/spreadsheets/d/1tbrV3TdS-yZvtNG-Tv0XnKayqU5IdllZkisGg_wNkLo/edit?usp=sharing" target="_blank">
                 Reporte del tráfico de datos

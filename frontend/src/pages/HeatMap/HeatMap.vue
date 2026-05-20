@@ -6,39 +6,70 @@ import 'leaflet/dist/leaflet.css';
 import '../HeatMap/HeatMap.css';
 
 const map = ref(null);
-const heatLayer = ref(null);
-
-const sedeUsuario = ref(localStorage.getItem('user_base') || 'OFC - Lima'); 
+const heatLayer = ref(null); 
 
 // Coordenadas de respaldo (Lima) por si acaso ocurra un error
 const coordenadasPorDefecto = [-12.06948, -77.03023];
 
 const cargarPuntosDeCalor = async () => {
   try {
-    const response = await fetch('http://localhost:3000/obtener-coordenadas');
+    // Captura fresca del storage
+    const sedeActual = localStorage.getItem('baseNumber') || localStorage.getItem('user_base') || 'OFC - Lima';
+    console.log("Buscando en el mapa la sede activa:", sedeActual);
+
+    const response = await fetch(`http://localhost:3000/obtener-coordenadas?sede=${encodeURIComponent(sedeActual)}`);
     const datosReales = await response.json();
     
     if (map.value && datosReales.length > 0) {
-      // Importamos dinámicamente el plugin si no se ha importado antes
       await import('leaflet.heat');
 
-      // Si ya existía una capa de calor previa, la removemos para no duplicar
+      // 1. BUSCADOR INTELIGENTE DE SEDE
+      const infoSedeUsuario = datosReales.find(row => {
+        const nombreLugar = row.lugar ? row.lugar.toLowerCase() : '';
+        const codigoUbi = row.cod_ubi ? row.cod_ubi.toLowerCase() : '';
+        const sesionUsuario = sedeActual.toLowerCase();
+
+        return sesionUsuario.includes(nombreLugar) || sesionUsuario.includes(codigoUbi);
+      });
+
+      // 2. TELETRANSPORTACIÓN INMEDIATA (Gracias al LEFT JOIN, esto siempre se cumplirá)
+      if (infoSedeUsuario) {
+        const nuevaLat = parseFloat(infoSedeUsuario.latitud);
+        const nuevaLng = parseFloat(infoSedeUsuario.longitud);
+        
+        console.log(`--> [ÉXITO] Enfocando mapa en: ${infoSedeUsuario.lugar} ([${nuevaLat}, ${nuevaLng}])`);
+        map.value.setView([nuevaLat, nuevaLng], 14);
+      } else {
+        map.value.setView(coordenadasPorDefecto, 12);
+      }
+
+      // 3. MAPEO DE PUNTOS DE CALOR (CORREGIDO EL TYPO DE INTENSITY)
+      // Solo mapeamos filas que tengan velocidades reales (para evitar los NULL del LEFT JOIN)
+      const puntosCalor = datosReales
+        .filter(row => row.velocidad !== null)
+        .map(row => {
+          let intensidad = 0.2;
+          if (row.velocidad >= 100) intensidad = 1.0;     // Excelente (Rojo)
+          else if (row.velocidad >= 50) intensidad = 0.7;  // Óptima (Naranja)
+          else if (row.velocidad >= 20) intensidad = 0.4;  // Moderada (Verde)
+          else intensidad = 0.1;                          // Baja (Azul)
+
+          return [parseFloat(row.latitud), parseFloat(row.longitud), intensidad];
+        });
+
       if (heatLayer.value) {
         map.value.removeLayer(heatLayer.value);
       }
 
-      // Dibujamos el mapa de calor con los datos reales de MySQL
-      heatLayer.value = L.heatLayer(datosReales, {
-        radius: 40,
-        blur: 25,
-        maxZoom: 15,
-        gradient: {
-          0.2: 'blue',
-          0.5: 'lime',
-          0.8: 'orange',
-          1.0: 'red'
-        }
-      }).addTo(map.value);
+      // Renderizamos las manchas si existen registros de velocidad
+      if (puntosCalor.length > 0) {
+        heatLayer.value = L.heatLayer(puntosCalor, {
+          radius: 40,
+          blur: 25,
+          maxZoom: 15,
+          gradient: { 0.2: 'blue', 0.5: 'lime', 0.8: 'orange', 1.0: 'red' }
+        }).addTo(map.value);
+      }
     }
   } catch (error) {
     console.error("Error al cargar los puntos de calor en el frontend:", error);
@@ -46,19 +77,15 @@ const cargarPuntosDeCalor = async () => {
 };
 
 onMounted(async () => {
-  // 1. Inicializar el mapa centrado en Lima con un zoom de 12
   map.value = L.map('map').setView(coordenadasPorDefecto, 12);
 
-  // 2. Cargar las capas de diseño (OpenStreetMap clásico)
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
   }).addTo(map.value);
 
-  // 3. Ejecutar la carga de datos desde el backend
   await cargarPuntosDeCalor();
 });
 
-// Limpieza para evitar fugas de memoria al cambiar de pestaña
 onUnmounted(() => {
   if (map.value) {
     map.value.remove();
