@@ -8,7 +8,6 @@ const port = 3000;
 app.use(express.json());
 app.use(cors());
 
-// Conexión al database del MySQL
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -80,7 +79,7 @@ app.get('/obtener-coordenadas', function(req, res) {
         }
 
         if (rows.length === 0) {
-            console.log("⚠️ La consulta se ejecutó, pero no trajo ningún registro amarrado con LIKE.");
+            console.log("La consulta se ejecutó, pero no trajo ningún registro amarrado con LIKE.");
         }
 
         res.json(rows);

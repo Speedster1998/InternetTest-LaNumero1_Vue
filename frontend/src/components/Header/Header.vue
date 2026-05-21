@@ -2,16 +2,11 @@
 import { ref } from 'vue';
 import '../Header/Header.css';
 
-// Recibimos las variables necesarias del padre para mantener la reactividad
-const props = defineProps({
+defineProps({
   isRegistered: Boolean,
-  tabActual: String,
-  speed: [Number, String],
-  ping: Number,
-  status: Object
+  tabActual: String
 });
 
-// Avisamos al padre cuando ocurren acciones de navegación o logout
 const emit = defineEmits(['update:tabActual', 'openMiniDashboard', 'triggerLogout']);
 
 const isOpenMenu = ref(false);

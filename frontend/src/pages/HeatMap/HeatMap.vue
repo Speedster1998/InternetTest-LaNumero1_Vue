@@ -8,7 +8,7 @@ import '../HeatMap/HeatMap.css';
 const map = ref(null);
 const heatLayer = ref(null); 
 
-// Coordenadas de respaldo (Lima) por si acaso ocurra un error
+// Coordenadas de respaldo de Oficina (Lima), en caso de que ocurra un error
 const coordenadasPorDefecto = [-12.06948, -77.03023];
 
 const cargarPuntosDeCalor = async () => {
@@ -43,8 +43,8 @@ const cargarPuntosDeCalor = async () => {
         map.value.setView(coordenadasPorDefecto, 12);
       }
 
-      // 3. MAPEO DE PUNTOS DE CALOR (CORREGIDO EL TYPO DE INTENSITY)
-      // Solo mapeamos filas que tengan velocidades reales (para evitar los NULL del LEFT JOIN)
+      // 3. MAPEO DE PUNTOS DE CALOR
+      // Solo mapeamos filas que tengan velocidades reales
       const puntosCalor = datosReales
         .filter(row => row.velocidad !== null)
         .map(row => {
