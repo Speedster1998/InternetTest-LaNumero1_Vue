@@ -1,26 +1,28 @@
 <script setup>
 import { ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import '../Header/Header.css';
 
 defineProps({
   isRegistered: Boolean,
-  tabActual: String
 });
 
-const emit = defineEmits(['update:tabActual', 'openMiniDashboard', 'triggerLogout']);
+const emit = defineEmits(['openMiniDashboard', 'triggerLogout']);
+
+const router = useRouter();
+const route = useRoute();
 
 const isOpenMenu = ref(false);
 const menuRef = ref(null);
 
-// Método auxiliar para cambiar de tab y cerrar la barra lateral
-const cambiarTab = (nuevaTab) => {
-  emit('update:tabActual', nuevaTab);
-  isOpenMenu.value = false;
+const cambiarTab = (rutaDestino) => {
+  router.push(rutaDestino);
+  isOpenMenu.value = false;   // Cierra la barra lateral
 };
 </script>
 
 <template>
-  <header v-if="isRegistered" class="global-navbar">
+  <header class="global-navbar">
     <div class="nav-content">
       <div class="header-left">
         <button class="menu-grid-btn" @click="isOpenMenu = true">
@@ -40,8 +42,8 @@ const cambiarTab = (nuevaTab) => {
           </div>
 
           <ul class="sidebar-links">
-            <li v-if="tabActual !== 'test'" @click="cambiarTab('test')">Test de Velocidad</li>
-            <li v-if="tabActual !== 'mapa'" @click="cambiarTab('mapa')">Mapa de Calor (Beta)</li>
+            <li v-if="route.path !== '/test'" @click="cambiarTab('/test')">Test de Velocidad</li>
+            <li v-if="route.path !== '/mapa'" @click="cambiarTab('/mapa')">Mapa de Calor (Beta)</li>
             <li>
               <a href="https://docs.google.com/spreadsheets/d/1tbrV3TdS-yZvtNG-Tv0XnKayqU5IdllZkisGg_wNkLo/edit?usp=sharing" target="_blank">
                 Reporte del tráfico de datos
@@ -55,7 +57,7 @@ const cambiarTab = (nuevaTab) => {
                 Intranet La Número 1
               </a>
             </li>
-            <li v-if="tabActual !== 'config'" @click="cambiarTab('config')">Configuración</li>
+            <li v-if="route.path !== '/config'" @click="cambiarTab('/config')">Configuración</li>
           </ul>
         </nav>
       </div>

@@ -1,15 +1,13 @@
 <script setup>
 import { ref } from 'vue';
-import Login from './pages/Login/Login.vue';
+import { useRouter, useRoute } from 'vue-router';
 import Header from './components/Header/Header.vue';
-import InternetTest from './pages/InternetTest/InternetTest.vue';
-import HeatMap from './pages/HeatMap/HeatMap.vue';
-import Settings from './pages/Settings/Settings.vue';
 import { toggleMiniDashboard } from './components/MiniDashboard/MiniDashboard.vue';
 
-const isRegistered = ref(!!localStorage.getItem('userName'));
-const tabActual = ref('test');
+const router = useRouter();
+const route = useRoute();
 const showModal = ref(false);
+const isMiniDashboardOpen = ref(false);
 
 const testData = ref({
   speed: null,
@@ -25,47 +23,41 @@ const onLoginSuccess = () => {
 
 const confirmLogout = () => {
   localStorage.clear();
-  isRegistered.value = false;
   showModal.value = false;
+  router.push('/login');
 };
 
 const handleTestComplete = (data) => {
   testData.value = data;
-  toggleMiniDashboard(data); // Mantiene la ventana actualizada al vuelo con los nuevos Mbps
+  if (isMiniDashboardOpen.value) {
+    toggleMiniDashboard(data);
+  }
 };
 
 const openMiniDashboard = () => {
+  isMiniDashboardOpen.value = true;
   toggleMiniDashboard(); // Abre la ventana usando los últimos datos guardados
 };
 </script>
 
 <template>
-  <Login v-if="!isRegistered" @login-success="onLoginSuccess" />
+  <Header 
+    v-if="route && route.path && route.path !== '/login'"
+    :speed="testData.speed"
+    :ping="testData.ping"
+    :status="{ label: testData.statusLabel, class: testData.statusClass }"
+    @openMiniDashboard="openMiniDashboard"
+    @triggerLogout="showModal = true"
+  />
+    
+  <div v-if="route.path === '/mapa' || route.path === '/config'" class="container dashboard-mode">
+    <div class="dashboard-view">
+      <router-view @test-complete="handleTestComplete" />
+    </div>
+  </div>
 
   <template v-else>
-    <Header 
-      v-model:tabActual="tabActual"
-      :isRegistered="isRegistered"
-      :speed="testData.speed"
-      :ping="testData.ping"
-      :status="{ label: testData.statusLabel, class: testData.statusClass }"
-      @openMiniDashboard="openMiniDashboard"
-      @triggerLogout="showModal = true"
-    />
-    
-    <InternetTest v-if="tabActual === 'test'" @test-complete="handleTestComplete" />
-    
-    <div v-else-if="tabActual === 'mapa'" class="container" :class="{ 'dashboard-mode': isRegistered }">
-      <div class="dashboard-view">
-        <HeatMap />
-      </div>
-    </div>
-    
-    <div v-else-if="tabActual === 'config'" class="container" :class="{ 'dashboard-mode': isRegistered }">
-      <div class="dashboard-view">
-        <Settings />
-      </div>
-    </div>
+    <router-view @test-complete="handleTestComplete" />
   </template>
 
   <Teleport to="body">

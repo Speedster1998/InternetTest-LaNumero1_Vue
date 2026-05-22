@@ -1,8 +1,9 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import '../Login/Login.css';
 
-const emit = defineEmits(['login-success']);
+const router = useRouter();
 
 const userName = ref('');
 const baseNumber = ref('');
@@ -10,24 +11,23 @@ const isOpen = ref(false);
 const sedes = ref([]);
 
 onMounted(async () => {
-    try {
-        // Llamada a tu servidor Node.js
-        const response = await fetch('http://localhost:3000/sedes');
-        if (response.ok) {
-            sedes.value = await response.json();
-        } else {
-            console.error("Error al obtener sedes desde el servidor");
-        }
-    } catch (error) {
-        console.error("No se pudo conectar con el backend de La Numero 1:", error);
+  try {
+    const response = await fetch('http://localhost:3000/sedes');
+    if (response.ok) {
+      sedes.value = await response.json();
+    } else {
+      console.error("Error al obtener sedes desde el servidor");
     }
+  } catch (error) {
+    console.error("No se pudo conectar con el backend de La Numero 1:", error);
+  }
 });
 
 const handleLogin = () => {
   if (userName.value.trim() && baseNumber.value.trim()) {
     localStorage.setItem('userName', userName.value);
     localStorage.setItem('baseNumber', baseNumber.value);
-    emit('login-success');
+    router.push('/test');
   } else {
     alert("Por favor, completa ambos campos.");
   }

@@ -108,6 +108,6 @@ app.post('/registrar-test', function(req,res){
     })
 })
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`Servidor de InternetTest corriendo en el puerto ${port}`);
 });
