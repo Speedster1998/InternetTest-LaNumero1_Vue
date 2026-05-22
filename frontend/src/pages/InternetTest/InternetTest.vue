@@ -209,8 +209,6 @@ watch(isRegistered, (newValue) => {
   }
 }, { immediate: true });
 
-
-
 </script>
 
 <template>
