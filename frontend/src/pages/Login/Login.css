@@ -5,6 +5,14 @@
   gap: 15px;
 }
 
+#lanumero1{
+  margin-top: 0;
+  margin-bottom: -15px;
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+}
+
 .login-form input {
   padding: 12px;
   border: 1.5px solid #ddd;

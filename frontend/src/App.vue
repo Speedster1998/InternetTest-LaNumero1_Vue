@@ -6,7 +6,6 @@ import { toggleMiniDashboard } from './components/MiniDashboard/MiniDashboard.vu
 
 const router = useRouter();
 const route = useRoute();
-const showModal = ref(false);
 const isMiniDashboardOpen = ref(false);
 
 const testData = ref({
@@ -15,17 +14,6 @@ const testData = ref({
   statusLabel: 'Sin datos',
   statusClass: ''
 });
-
-const onLoginSuccess = () => {
-  isRegistered.value = true;
-  tabActual.value = 'test';
-};
-
-const confirmLogout = () => {
-  localStorage.clear();
-  showModal.value = false;
-  router.push('/login');
-};
 
 const handleTestComplete = (data) => {
   testData.value = data;
@@ -47,7 +35,6 @@ const openMiniDashboard = () => {
     :ping="testData.ping"
     :status="{ label: testData.statusLabel, class: testData.statusClass }"
     @openMiniDashboard="openMiniDashboard"
-    @triggerLogout="showModal = true"
   />
     
   <div v-if="route.path === '/mapa' || route.path === '/config'" class="container dashboard-mode">
@@ -59,17 +46,4 @@ const openMiniDashboard = () => {
   <template v-else>
     <router-view @test-complete="handleTestComplete" />
   </template>
-
-  <Teleport to="body">
-    <div v-if="showModal" class="modal-overlay">
-      <div class="modal-content">
-        <h2>¿Cerrar Sesión?</h2>
-        <p>Se borrarán los datos de esta sesión y volverás al registro.</p>
-        <div class="modal-buttons">
-          <button @click="confirmLogout" class="btn-confirm">Sí, salir</button>
-          <button @click="showModal = false" class="btn-cancel">Regresar</button>
-        </div>
-      </div>
-    </div>
-  </Teleport>
 </template>

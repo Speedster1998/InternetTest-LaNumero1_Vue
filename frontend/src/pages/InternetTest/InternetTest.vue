@@ -22,7 +22,7 @@ defineProps({
 
 const emit = defineEmits(['test-complete']);
 
-// --- LÓGICA DE NEGOCIO ---
+// --- LÓGICA DEL TEST DE INTERNET ---
 const getStatus = (val) => {
   if (!val) return { label: "", class: "" };
   if (val < 20) return { label: "Baja", class: "status-low" };

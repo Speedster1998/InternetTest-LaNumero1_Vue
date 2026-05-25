@@ -3,7 +3,7 @@ import { ref, watch } from 'vue';
 import '../Settings/Settings.css';
 
 const mode = ref(localStorage.getItem('testMode') || 'both'); // 'manual' o 'both'
-const interval = ref(parseInt(localStorage.getItem('testInterval')) || 60); // en minutos
+const interval = ref(parseInt(localStorage.getItem('testInterval')) || 60); // En minutos
 
 watch([mode, interval], (newValues) => {
   const [newMode, newInterval] = newValues; // Desestructuramos para ver qué llega
@@ -13,12 +13,9 @@ watch([mode, interval], (newValues) => {
   
   // Enviamos el evento
   window.dispatchEvent(new Event('config-updated'));
-  
-  // Esto te dirá en la consola si el evento realmente se disparó
   console.log(`Evento enviado: Modo=${newMode}, Intervalo=${newInterval} (Tipo: ${typeof newInterval})`);
 });
 
-// Estado para el Pop-up de éxito
 const showSuccessModal = ref(false);
 
 const saveConfig = () => {
@@ -32,7 +29,7 @@ const saveConfig = () => {
   // 3. Mostramos el Pop-up de éxito
   showSuccessModal.value = true;
   
-  console.log("✅ Configuración guardada manualmente.");
+  console.log("Configuración guardada manualmente.");
 };
 </script>
 

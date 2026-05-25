@@ -7,17 +7,30 @@ defineProps({
   isRegistered: Boolean,
 });
 
-const emit = defineEmits(['openMiniDashboard', 'triggerLogout']);
+const emit = defineEmits(['openMiniDashboard']);
 
 const router = useRouter();
 const route = useRoute();
 
 const isOpenMenu = ref(false);
 const menuRef = ref(null);
+const showModal = ref(false);
 
 const cambiarTab = (rutaDestino) => {
   router.push(rutaDestino);
   isOpenMenu.value = false;   // Cierra la barra lateral
+};
+
+/*
+const onLoginSuccess = () => {
+  isRegistered.value = true;
+  tabActual.value = 'test';
+};*/
+
+const confirmLogout = () => {
+  localStorage.clear();
+  showModal.value = false;
+  router.push('/login');
 };
 </script>
 
@@ -67,7 +80,7 @@ const cambiarTab = (rutaDestino) => {
       </div>
 
       <div class="header-right">
-        <button @click="emit('triggerLogout')" class="logout-circle-btn">
+        <button @click="showModal = true" class="logout-circle-btn">
           <svg viewBox="0 0 24 24" width="18" height="18" stroke="white" stroke-width="2" fill="none">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
             <polyline points="16 17 21 12 16 7"></polyline>
@@ -77,4 +90,17 @@ const cambiarTab = (rutaDestino) => {
       </div>      
     </div>
   </header>
+
+  <Teleport to="body">
+    <div v-if="showModal" class="modal-overlay">
+      <div class="modal-content">
+        <h2>¿Cerrar Sesión?</h2>
+        <p>Se borrarán los datos de esta sesión y volverás al registro.</p>
+        <div class="modal-buttons">
+          <button @click="confirmLogout" class="btn-confirm">Sí, salir</button>
+          <button @click="showModal = false" class="btn-cancel">Regresar</button>
+        </div>
+      </div>
+    </div>
+  </Teleport>
 </template>
