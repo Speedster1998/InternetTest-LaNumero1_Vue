@@ -8,8 +8,9 @@ import '../HeatMap/HeatMap.css';
 const map = ref(null);
 const heatLayer = ref(null); 
 
-// Coordenadas de respaldo de Oficina (Lima), en caso de que ocurra un error
-const coordenadasPorDefecto = [-12.06948, -77.03023];
+// Vista general de todo Perú
+const coordenadasPeru = [-9.19, -75.015];
+const zoomPeru = 6;
 
 const cargarPuntosDeCalor = async () => {
   try {
@@ -32,16 +33,8 @@ const cargarPuntosDeCalor = async () => {
         return sesionUsuario.includes(nombreLugar) || sesionUsuario.includes(codigoUbi);
       });
 
-      // 2. TELETRANSPORTACIÓN INMEDIATA (Gracias al LEFT JOIN, esto siempre se cumplirá)
-      if (infoSedeUsuario) {
-        const nuevaLat = parseFloat(infoSedeUsuario.latitud);
-        const nuevaLng = parseFloat(infoSedeUsuario.longitud);
-        
-        console.log(`--> [ÉXITO] Enfocando mapa en: ${infoSedeUsuario.lugar} ([${nuevaLat}, ${nuevaLng}])`);
-        map.value.setView([nuevaLat, nuevaLng], 14);
-      } else {
-        map.value.setView(coordenadasPorDefecto, 12);
-      }
+      // 2. VISTA PANORÁMICA DE PERÚ (muestra todas las sedes a la vez)
+      map.value.setView(coordenadasPeru, zoomPeru);
 
       // 3. MAPEO DE PUNTOS DE CALOR
       // Solo mapeamos filas que tengan velocidades reales
@@ -64,10 +57,11 @@ const cargarPuntosDeCalor = async () => {
       // Renderizamos las manchas si existen registros de velocidad
       if (puntosCalor.length > 0) {
         heatLayer.value = L.heatLayer(puntosCalor, {
-          radius: 40,
-          blur: 25,
-          maxZoom: 15,
-          gradient: { 0.2: 'blue', 0.5: 'lime', 0.8: 'orange', 1.0: 'red' }
+          radius: 60,
+          blur: 40,
+          maxZoom: 10,
+          minOpacity: 0.4,
+          gradient: { 0.1: '#313695', 0.3: '#4575b4', 0.5: '#74add1', 0.6: '#fee090', 0.8: '#f46d43', 1.0: '#a50026' }
         }).addTo(map.value);
       }
     }
@@ -77,7 +71,7 @@ const cargarPuntosDeCalor = async () => {
 };
 
 onMounted(async () => {
-  map.value = L.map('map').setView(coordenadasPorDefecto, 12);
+  map.value = L.map('map').setView(coordenadasPeru, zoomPeru);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
@@ -97,7 +91,6 @@ onUnmounted(() => {
   <div class="map-view">
     <h1>Cobertura Geográfica</h1>
     <p class="subtitle">Monitoreo en tiempo real de la calidad de conexión por sedes</p>
-    
     <div id="map" class="map-container"></div>
   </div>
 </template>
