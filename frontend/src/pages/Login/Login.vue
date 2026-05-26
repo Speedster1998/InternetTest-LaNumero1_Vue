@@ -7,6 +7,7 @@ const router = useRouter();
 
 const userName = ref('');
 const baseNumber = ref('');
+const selectedId = ref(null);
 const isOpen = ref(false);
 const sedes = ref([]);
 
@@ -23,10 +24,17 @@ onMounted(async () => {
   }
 });
 
+const selectSede = (sede) => {
+  baseNumber.value = `${sede.cod_ubi} - ${sede.lugar}`;
+  selectedId.value = sede.id_ubicacion;
+  isOpen.value = false;
+};
+
 const handleLogin = () => {
   if (userName.value.trim() && baseNumber.value.trim()) {
     localStorage.setItem('userName', userName.value);
     localStorage.setItem('baseNumber', baseNumber.value);
+    localStorage.setItem('idProvincia', selectedId.value);
     router.push('/test');
   } else {
     alert("Por favor, completa ambos campos.");
@@ -48,9 +56,9 @@ const handleLogin = () => {
           <i class="arrow-icon"></i>
         </div>
         <ul v-if="isOpen" class="select-options-list">
-          <li v-for="sede in sedes" :key="sede.cod_ubi" 
-              @click="baseNumber = `${sede.cod_ubi} - ${sede.lugar}`; isOpen = false"
-              :class="{ selected: baseNumber === `${sede.cod_ubi} - ${sede.lugar}` }">
+          <li v-for="sede in sedes" :key="sede.id_ubicacion" 
+              @click="selectSede(sede)"
+              :class="{ selected: selectedId === sede.id_ubicacion }">
             {{ sede.cod_ubi }} - {{ sede.lugar }}
           </li>
         </ul>

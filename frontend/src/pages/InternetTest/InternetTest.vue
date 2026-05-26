@@ -107,11 +107,10 @@ const enviarReporte = async (mbps, nivel, msPing) => {
 
 const enviarResultados = async (velocidad, latencia, nivel) => {
     const datos = {
-        usuario: userName.value,
-        base: baseNumber.value,
-        velocidad: velocidad,
-        ping: latencia,
-        nivelConexion: nivel
+        id_provincia: parseInt(localStorage.getItem('idProvincia')),
+        velocidad_bajada_mbps: velocidad,
+        ping_ms: latencia,
+        nivel_conexion: nivel
     };
 
     const response = await fetch('http://localhost:3000/registrar-test', {

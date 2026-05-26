@@ -9,7 +9,8 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       devOptions: {
-        enabled: true // Para que lo detecte Chrome en modo desarrollo
+        enabled: true,
+        suppressWarnings: true
       },
       manifest: {
         name: 'Internet Test',

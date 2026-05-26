@@ -30,7 +30,7 @@ app.get('/', function(req, res) {
 
 app.get('/sedes', function(req, res) {
     // Traemos solo lo necesario para el select
-    const sql = "SELECT cod_ubi, lugar FROM sedes WHERE estado = 1 AND lugar IS NOT NULL ORDER BY id_ubicacion ASC";
+    const sql = "SELECT id_ubicacion, cod_ubi, lugar FROM ubicacion WHERE estado = 1 AND lugar IS NOT NULL ORDER BY id_ubicacion ASC";
     db.query(sql, (err, result) => {
         if (err){
             return res.status(500).json({ error: err.message });
@@ -41,7 +41,7 @@ app.get('/sedes', function(req, res) {
 
 app.get('/sedes/:id', function(req, res) {
     const id = req.params.id; // Extraemos el ID de la URL
-    const sql = "SELECT * FROM sedes WHERE id_ubicacion = ?";
+    const sql = "SELECT * FROM ubicacion WHERE id_ubicacion = ?";
     
     // Usamos el signo '?' para prevenir Inyección SQL (Seguridad Zero Trust)
     db.query(sql, [id], (err, result) => {
@@ -65,10 +65,10 @@ app.get('/obtener-coordenadas', function(req, res) {
             s.longitud, 
             s.lugar,
             s.cod_ubi,
-            r.velocidad,
-            r.base
-        FROM sedes s
-        LEFT JOIN registroInternet r ON r.base LIKE CONCAT('%', s.lugar, '%')
+            m.velocidad_bajada_mbps AS velocidad,
+            m.id_provincia
+        FROM ubicacion s
+        LEFT JOIN monitoreo_conexion m ON m.id_provincia = s.id_ubicacion
         WHERE s.latitud IS NOT NULL AND s.longitud IS NOT NULL
     `;
 
@@ -89,12 +89,12 @@ app.get('/obtener-coordenadas', function(req, res) {
 app.post('/registrar-test', function(req,res){
     console.log("Llegaron los datos:", req.body);
 
-    const { usuario, base, velocidad, ping, nivelConexion } = req.body;
+    const { id_provincia, velocidad_bajada_mbps, ping_ms, nivel_conexion } = req.body;
 
-    const sql = `INSERT INTO registroInternet 
-                 (usuario, base, velocidad, ping, nivelConexion) 
-                 VALUES (?, ?, ?, ?, ?)`;
-    const values = [usuario, base, velocidad, ping, nivelConexion];
+    const sql = `INSERT INTO monitoreo_conexion 
+                 (id_provincia, velocidad_bajada_mbps, ping_ms, nivel_conexion) 
+                 VALUES (?, ?, ?, ?)`;
+    const values = [id_provincia, velocidad_bajada_mbps, ping_ms, nivel_conexion];
     db.query(sql, values, function(err, result){
         if (err) {
             console.error("Error al grabar registro:", err);
