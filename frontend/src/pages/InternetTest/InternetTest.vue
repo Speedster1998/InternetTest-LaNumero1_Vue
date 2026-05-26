@@ -108,6 +108,7 @@ const enviarReporte = async (mbps, nivel, msPing) => {
 const enviarResultados = async (velocidad, latencia, nivel) => {
     const datos = {
         id_provincia: parseInt(localStorage.getItem('idProvincia')),
+        nom_usuario: userName.value,
         velocidad_bajada_mbps: velocidad,
         ping_ms: latencia,
         nivel_conexion: nivel

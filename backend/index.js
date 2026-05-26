@@ -89,12 +89,12 @@ app.get('/obtener-coordenadas', function(req, res) {
 app.post('/registrar-test', function(req,res){
     console.log("Llegaron los datos:", req.body);
 
-    const { id_provincia, velocidad_bajada_mbps, ping_ms, nivel_conexion } = req.body;
+    const { id_provincia, nom_usuario, velocidad_bajada_mbps, ping_ms, nivel_conexion } = req.body;
 
     const sql = `INSERT INTO monitoreo_conexion 
-                 (id_provincia, velocidad_bajada_mbps, ping_ms, nivel_conexion) 
-                 VALUES (?, ?, ?, ?)`;
-    const values = [id_provincia, velocidad_bajada_mbps, ping_ms, nivel_conexion];
+                 (id_provincia, nom_usuario, velocidad_bajada_mbps, ping_ms, nivel_conexion) 
+                 VALUES (?, ?, ?, ?, ?)`;
+    const values = [id_provincia, nom_usuario, velocidad_bajada_mbps, ping_ms, nivel_conexion];
     db.query(sql, values, function(err, result){
         if (err) {
             console.error("Error al grabar registro:", err);
