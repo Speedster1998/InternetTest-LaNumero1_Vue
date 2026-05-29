@@ -24,7 +24,18 @@ const handleTestComplete = (data) => {
 
 const openMiniDashboard = () => {
   isMiniDashboardOpen.value = true;
-  toggleMiniDashboard(); // Abre la ventana usando los últimos datos guardados
+  const popupRef = toggleMiniDashboard(testData.value); 
+  
+  // Si el usuario cierra la ventana con la "X" del navegador,
+  // reiniciamos nuestro estado para que NO se vuelva a abrir sola en el siguiente test.
+  if (popupRef) {
+    const timer = setInterval(() => {
+      if (popupRef.closed) {
+        clearInterval(timer);
+        isMiniDashboardOpen.value = false;
+      }
+    }, 500); // Revisa cada medio segundo de forma ultra ligera
+  }
 };
 </script>
 

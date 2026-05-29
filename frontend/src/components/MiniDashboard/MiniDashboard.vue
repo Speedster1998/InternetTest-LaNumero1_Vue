@@ -59,9 +59,9 @@ export const toggleMiniDashboard = (data) => {
   if (data) {
     latestData.value = data;
     // Si la ventana ya existe y está viva, actualizamos sus props reactivas al vuelo
-    if (miniWindowInstance) {
+    if (miniWindowInstance && miniWindowRef && !miniWindowRef.closed) {
       Object.assign(miniWindowInstance._instance.props, data);
-      return;
+      return miniWindowRef;
     }
   }
 
@@ -77,7 +77,7 @@ export const toggleMiniDashboard = (data) => {
 
   if (!miniWindowRef) {
     console.error("El navegador bloqueó la ventana emergente.");
-    return;
+    return null;
   }
 
   const subDocument = miniWindowRef.document;
@@ -187,5 +187,7 @@ export const toggleMiniDashboard = (data) => {
       console.error("Error al montar el MiniDashboard real:", error);
     }
   }, 40);
+
+  return miniWindowRef;
 };
 </script>
