@@ -7,8 +7,7 @@ node_modules/
 **/dist/
 
 # Omitir variables de entorno (Seguridad)
-.env
-.env.example
+**/.env
 
 # Store de pnpm (cache de paquetes)
 .pnpm-store/
@@ -16,6 +15,9 @@ node_modules/
 # Lockfiles raíz (los reales están en backend/ y frontend/)
 /package.json
 /pnpm-lock.yaml
+
+# Bloquear rastreo de candados de NPM por seguridad
+**/package-lock.json
 
 # Archivos de logs
 npm-debug.log*
