@@ -24,6 +24,26 @@ const cargarPuntosDeCalor = async () => {
     if (map.value && datosReales.length > 0) {
       await import('leaflet.heat');
 
+      /*
+      // Parche para simpleheat: aumentar el padding del canvas y evitar el borde/mancha cuadrado (artefacto visual)
+      if (window.simpleheat) {
+        window.simpleheat.prototype.radius = function (t, i) {
+          i = i || 15;
+          var a = this._circle = document.createElement("canvas"),
+              s = a.getContext("2d"),
+              e = this._r = t + i + (i); // Padding extra igual al blur (i) para evitar cortes
+          a.width = a.height = 2 * e;
+          s.shadowOffsetX = s.shadowOffsetY = 200;
+          s.shadowBlur = i;
+          s.shadowColor = "black";
+          s.beginPath();
+          s.arc(e - 200, e - 200, t, 0, 2 * Math.PI, !0);
+          s.closePath();
+          s.fill();
+          return this;
+        };
+      }*/
+
       // 1. BUSCADOR INTELIGENTE DE SEDE
       const infoSedeUsuario = datosReales.find(row => {
         const nombreLugar = row.lugar ? row.lugar.toLowerCase() : '';
@@ -41,11 +61,11 @@ const cargarPuntosDeCalor = async () => {
       const puntosCalor = datosReales
         .filter(row => row.velocidad !== null)
         .map(row => {
-          let intensidad = 0.2;
-          if (row.velocidad >= 100) intensidad = 1.0;     // Excelente (Rojo)
-          else if (row.velocidad >= 50) intensidad = 0.7;  // Óptima (Naranja)
-          else if (row.velocidad >= 20) intensidad = 0.4;  // Moderada (Verde)
-          else intensidad = 0.1;                          // Baja (Azul)
+          let intensidad = 0.1;
+          if (row.velocidad < 20) intensidad = 1.0;     // Lenta (Rojo)
+          else if (row.velocidad < 50) intensidad = 0.7;  // Moderada (Naranja)
+          else if (row.velocidad < 100) intensidad = 0.4;  // Óptima (Verde)
+          else intensidad = 0.1;                          // Excelente (Azul)
 
           return [parseFloat(row.latitud), parseFloat(row.longitud), intensidad];
         });
@@ -61,7 +81,13 @@ const cargarPuntosDeCalor = async () => {
           blur: 40,
           maxZoom: 10,
           minOpacity: 0.4,
-          gradient: { 0.1: '#313695', 0.3: '#4575b4', 0.5: '#74add1', 0.6: '#fee090', 0.8: '#f46d43', 1.0: '#a50026' }
+          gradient: {
+            0.2: 'rgba(0, 0, 255, 0.6)',    // Azul muy suave (Excelente)
+            0.4: 'rgba(0, 255, 255, 0.7)',  // Cian (Óptima)
+            0.6: 'rgba(0, 255, 0, 0.8)',    // Verde (Moderada)
+            0.8: 'rgba(255, 165, 0, 0.85)', // Naranja (Inestable)
+            1.0: 'rgba(220, 20, 60, 0.9)'
+          }
         }).addTo(map.value);
       }
     }

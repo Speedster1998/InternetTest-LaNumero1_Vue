@@ -104,10 +104,10 @@ a:hover{
 }
 
 .container.container-map {
-  max-width: 700px;
+  max-width: 680px;
   max-height: none;
   height: calc(100vh - 90px);
-  padding: 1.75rem 1.8rem;
+  padding: 1.8rem 1.8rem;
 }
 
 button {

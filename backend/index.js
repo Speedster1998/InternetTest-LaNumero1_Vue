@@ -65,11 +65,12 @@ app.get('/obtener-coordenadas', function(req, res) {
             s.longitud, 
             s.lugar,
             s.cod_ubi,
-            m.velocidad_bajada_mbps AS velocidad,
+            AVG(m.velocidad_bajada_mbps) AS velocidad,
             m.id_provincia
         FROM ubicacion s
         LEFT JOIN monitoreo_conexion m ON m.id_provincia = s.id_ubicacion
         WHERE s.latitud IS NOT NULL AND s.longitud IS NOT NULL
+        GROUP BY s.latitud, s.longitud, s.lugar, s.cod_ubi, m.id_provincia
     `;
 
     db.query(query, (err, rows) => {

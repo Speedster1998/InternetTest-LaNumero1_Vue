@@ -84,6 +84,7 @@ const measurePing = async () => {
   }
 };
 
+// --- ENVÍO DE INFORMACIÓN A UNA HOJA DE GOOGLE SHEETS ---
 const enviarReporte = async (mbps, nivel, msPing) => {
   const urlScript = "https://script.google.com/macros/s/AKfycbx7B3S7YniC23kE1XadOO8_L00jHs4UBu31iKYxeiRm3nk4SuROwV0yUcarsddvj6cZIQ/exec";
   try {
@@ -105,6 +106,7 @@ const enviarReporte = async (mbps, nivel, msPing) => {
   }
 };
 
+// --- ENVÍO DE INFORMACIÓN A LA BASE DE DATOS ---
 const enviarResultados = async (velocidad, latencia, nivel) => {
     const datos = {
         id_provincia: parseInt(localStorage.getItem('idProvincia')),
