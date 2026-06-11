@@ -3,6 +3,7 @@ import Login from '../pages/Login/Login.vue';
 import InternetTest from '../pages/InternetTest/InternetTest.vue';
 import HeatMap from '../pages/HeatMap/HeatMap.vue';
 import Settings from '../pages/Settings/Settings.vue';
+import TestsResults from '../pages/TestsResults/TestsResults.vue';
 
 const routes = [
   {
@@ -21,7 +22,7 @@ const routes = [
     meta: { requiresAuth: true } // Bandera para proteger la ruta
   },
   {
-    path: '/mapa',
+    path: '/maps',
     name: 'HeatMap',
     component: HeatMap,
     meta: { requiresAuth: true }
@@ -30,6 +31,12 @@ const routes = [
     path: '/config',
     name: 'Settings',
     component: Settings,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/results',
+    name: 'TestsResults',
+    component: TestsResults,
     meta: { requiresAuth: true }
   }
 ];

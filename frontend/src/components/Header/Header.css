@@ -157,6 +157,11 @@
   cursor: pointer;
   font-weight: 500;
   color: #333;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
 }
 
 .sidebar-links li:hover {

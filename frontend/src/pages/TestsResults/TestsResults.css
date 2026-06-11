@@ -1,0 +1,112 @@
+.resultados-view{
+  background: transparent;
+  width: 100%;
+  max-width: 1000px; /* Tope máximo para pantallas ultra anchas */
+  margin: 0 auto; /* Centra todo el bloque en la pantalla */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.resultados-title {
+  font-size: 29pt;
+  margin-bottom: 7px;
+}
+
+.results-order{
+  margin-bottom: 18px;
+}
+
+.loading-wrapper,
+.empty-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.table-wrapper {
+  width: 100%;
+  max-width: 1000px;
+  max-height: 65vh;
+  background: white;
+  overflow-x: auto;
+  overflow-y: auto;
+  margin-top: 2px;
+  border: 1px solid rgba(15, 15, 15, 0.1);
+  border-radius: 15px;
+  box-shadow: 0 10px 15px -5px rgba(0, 0, 0, 0.3);
+  transform: translateZ(0);
+}
+
+.resultados-table {
+  width: 100%;
+  min-width: 700px;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.resultados-table thead {
+  background-color: rgba(0, 112, 243, 0.05); 
+}
+
+.resultados-table th {
+  position: sticky; /* Congela la cabecera */
+  top: 0;           /* La pega al techo del contenedor */
+  z-index: 10;      /* Evita que los datos de abajo se sobrepongan */
+  background-color: #f4f8fe;
+
+  padding: 14px 16px;
+  color: #333;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.resultados-table td {
+  padding: 14px 16px;
+  color: #555;
+  font-size: 0.95rem;
+  border-bottom: 1px solid #e2e8f0;
+  transition: background 0.2s ease;
+}
+
+.resultados-table tbody tr:hover td {
+  background-color: rgba(0, 0, 0, 0.02); 
+}
+
+.resultados-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.status-low { background-color: #fee2e2; color: #dc2626; border: 1px solid #fecaca; }
+.status-mod { background-color: #fef08a; color: #ca8a04; border: 1px solid #fde047; }
+.status-opt { background-color: #dcfce7; color: #16a34a; border: 1px solid #bbf7d0; }
+.status-exc { background-color: #ddedf0; color: #328df4; border: 1px solid #aeeaf5; }
+
+/* Spinner de carga */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0, 112, 243, 0.1);
+  border-left-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px auto;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

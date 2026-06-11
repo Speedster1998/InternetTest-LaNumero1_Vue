@@ -21,12 +21,6 @@ const cambiarTab = (rutaDestino) => {
   isOpenMenu.value = false;   // Cierra la barra lateral
 };
 
-/*
-const onLoginSuccess = () => {
-  isRegistered.value = true;
-  tabActual.value = 'test';
-};*/
-
 const confirmLogout = () => {
   localStorage.clear();
   showModal.value = false;
@@ -55,22 +49,27 @@ const confirmLogout = () => {
           </div>
 
           <ul class="sidebar-links">
-            <li v-if="route.path !== '/test'" @click="cambiarTab('/test')">Test de Velocidad</li>
-            <li v-if="route.path !== '/mapa'" @click="cambiarTab('/mapa')">Mapa de Calor (Beta)</li>
-            <li>
-              <a href="https://docs.google.com/spreadsheets/d/1tbrV3TdS-yZvtNG-Tv0XnKayqU5IdllZkisGg_wNkLo/edit?usp=sharing" target="_blank">
-                Reporte del tráfico de datos
-              </a>
+            <li v-if="route.path !== '/test'" @click="cambiarTab('/test')">
+              <v-icon name="md-speed" scale="1.1" /> Test de Velocidad
+            </li>
+            <li v-if="route.path !== '/maps'" @click="cambiarTab('/maps')">
+              <v-icon name="fa-map-marker-alt" scale="1.1" /> Mapa de Calor
+            </li>
+            <li v-if="route.path !== '/results'" @click="cambiarTab('/results')">
+              <v-icon name="bi-table" scale="1.1" /> Resultados de los Test
             </li>
             <li @click="emit('openMiniDashboard'); isOpenMenu = false">
-              Ventana Resumen
+              <v-icon name="bi-window" scale="1.1" stroke="currentColor" stroke-width="0.5" /> Ventana Resumen
             </li>
             <li>
+              <v-icon name="md-desktopwindows" scale="1.05" />
               <a href="https://intranet.grupolanumero1.com.pe/" target="_blank">
                 Intranet La Número 1
               </a>
             </li>
-            <li v-if="route.path !== '/config'" @click="cambiarTab('/config')">Configuración</li>
+            <li v-if="route.path !== '/config'" @click="cambiarTab('/config')">
+              <v-icon name="md-settings" scale="1.1" /> Configuración
+            </li>
           </ul>
         </nav>
       </div>

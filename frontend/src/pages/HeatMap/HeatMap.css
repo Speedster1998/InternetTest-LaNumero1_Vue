@@ -1,5 +1,5 @@
 .map-view h1 {
-  font-size: 25pt !important;
+  font-size: 27pt !important;
   margin-bottom: 6px !important;
 }
 
@@ -26,4 +26,10 @@
   border: 1px solid #ddd;
   margin-top: 5px;
   z-index: 1;
+}
+
+@media (max-height: 768px){
+  .map-view h1{
+    font-size: 22.5pt !important;
+  }
 }

@@ -12,7 +12,7 @@ const db = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASS,
-    database: process.env.DB_NAME
+    database: process.env.DB_NAME,
 });
 
 // Test de conexión al MySQL
@@ -90,12 +90,12 @@ app.get('/obtener-coordenadas', function(req, res) {
 app.post('/registrar-test', function(req,res){
     console.log("Llegaron los datos:", req.body);
 
-    const { id_provincia, nom_usuario, velocidad_bajada_mbps, ping_ms, nivel_conexion } = req.body;
+    const { id_provincia, nom_usuario, velocidad_bajada_mbps, ping_ms, nivel_conexion, fecha_test } = req.body;
 
     const sql = `INSERT INTO monitoreo_conexion 
-                 (id_provincia, nom_usuario, velocidad_bajada_mbps, ping_ms, nivel_conexion) 
-                 VALUES (?, ?, ?, ?, ?)`;
-    const values = [id_provincia, nom_usuario, velocidad_bajada_mbps, ping_ms, nivel_conexion];
+                 (id_provincia, nom_usuario, velocidad_bajada_mbps, ping_ms, nivel_conexion, fecha_hora) 
+                 VALUES (?, ?, ?, ?, ?, ?)`;
+    const values = [id_provincia, nom_usuario, velocidad_bajada_mbps, ping_ms, nivel_conexion, fecha_test];
     db.query(sql, values, function(err, result){
         if (err) {
             console.error("Error al grabar registro:", err);
@@ -108,6 +108,30 @@ app.post('/registrar-test', function(req,res){
         });
     })
 })
+
+app.get('/resultados', function(req, res) {
+    const query = `
+        SELECT 
+            m.id_monitoreo,
+            m.nom_usuario, 
+            m.velocidad_bajada_mbps, 
+            m.ping_ms, 
+            m.nivel_conexion,
+            m.fecha_hora,
+            u.lugar as sede
+        FROM monitoreo_conexion m
+        LEFT JOIN ubicacion u ON m.id_provincia = u.id_ubicacion
+        ORDER BY m.id_provincia DESC 
+        LIMIT 100
+    `;
+    db.query(query, (err, rows) => {
+        if (err) {
+            console.error("Error al obtener resultados:", err);
+            return res.status(500).json({ error: "Error en la base de datos" });
+        }
+        res.json(rows);
+    });
+});
 
 app.listen(port, '0.0.0.0', () => {
   console.log(`Servidor de InternetTest corriendo en el puerto ${port}`);

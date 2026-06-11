@@ -40,8 +40,8 @@ body {
 h1{
   font-size: 32pt;
   color: #333;
-  margin-top: 0px;
   line-height: 1.2;
+  margin-top: 3px;
   margin-bottom: 20px;
   letter-spacing: -0.05em;
 }
@@ -72,10 +72,7 @@ a:hover{
 
 .container {
   background-color: white;
-  padding-top: 1.35rem;
-  padding-bottom: 2.5rem;
-  padding-right: 2.5rem;
-  padding-left: 2.5rem;
+  padding: 2.2rem;
   border-radius: 25px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.1);
   text-align: center;
@@ -84,8 +81,8 @@ a:hover{
   box-sizing: border-box;
 
   /* NOTA: Que no se pase del alto de la pantalla en laptops 14" */
-  height: auto;
-  max-height: 785px;
+  min-height: auto;
+  max-height: calc(100vh - 100px);
 
   display: flex;
   flex-direction: column;
@@ -95,16 +92,20 @@ a:hover{
   z-index: 10;
 }
 
+.container.container-large {
+  max-width: 1050px;
+  width: 95%;
+}
+
 .container.dashboard-mode {
   background-color: rgba(255, 255, 255, 0.85) !important;
   backdrop-filter: blur(10px);
-  padding-top: 2.5rem !important;
   border: 1px solid rgba(255, 255, 255, 0.3);
   margin-top: 55px;
 }
 
 .container.container-map {
-  max-width: 680px;
+  max-width: 800px;
   max-height: none;
   height: calc(100vh - 90px);
   padding: 1.8rem 1.8rem;
@@ -171,16 +172,16 @@ button:disabled {
     max-width: 185px !important;
   }
   .container {
-    padding-top: 1.25rem;
-    padding-bottom: 1.5rem;
-    padding-right: 1.6rem;
-    padding-left: 1.6rem;
+    max-width: 450px !important;
+    padding: 1.6rem;
     width: 92%;
   }
-  .container.dashboard-mode{
-    padding-top: 2.15rem !important;
+
+  .dashboard-view {
+    align-items: stretch !important;
   }
+
   .container.container-map {
-    padding: 1rem;
+    padding: 1.2rem;
   }
 }

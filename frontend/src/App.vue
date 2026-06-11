@@ -48,9 +48,12 @@ const openMiniDashboard = () => {
     @openMiniDashboard="openMiniDashboard"
   />
     
-  <div v-if="route.path === '/mapa' || route.path === '/config'" 
-       class="container dashboard-mode" 
-       :class="{ 'container-map': route.path === '/mapa' }">
+  <div v-if="route.path === '/maps' || route.path === '/config' || route.path === '/results'" 
+      class="container dashboard-mode" 
+      :class="{ 
+        'container-map': route.path === '/maps',
+        'container-large': route.path === '/results' 
+      }">
     <div class="dashboard-view">
       <router-view @test-complete="handleTestComplete" />
     </div>

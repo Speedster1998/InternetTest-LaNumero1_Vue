@@ -84,6 +84,7 @@ const measurePing = async () => {
   }
 };
 
+/*
 // --- ENVÍO DE INFORMACIÓN A UNA HOJA DE GOOGLE SHEETS ---
 const enviarReporte = async (mbps, nivel, msPing) => {
   const urlScript = "https://script.google.com/macros/s/AKfycbx7B3S7YniC23kE1XadOO8_L00jHs4UBu31iKYxeiRm3nk4SuROwV0yUcarsddvj6cZIQ/exec";
@@ -104,25 +105,39 @@ const enviarReporte = async (mbps, nivel, msPing) => {
   } catch (error) {
     console.error("Error al enviar el reporte:", error);
   }
-};
+};*/
 
 // --- ENVÍO DE INFORMACIÓN A LA BASE DE DATOS ---
 const enviarResultados = async (velocidad, latencia, nivel) => {
-    const datos = {
-        id_provincia: parseInt(localStorage.getItem('idProvincia')),
-        nom_usuario: userName.value,
-        velocidad_bajada_mbps: velocidad,
-        ping_ms: latencia,
-        nivel_conexion: nivel
-    };
+  // Funciones para subir la hora de nuestra máquina al DB:
+  const ahora = new Date();
+  const fechaLocal = ahora.getFullYear() + '-' +
+    String(ahora.getMonth() + 1).padStart(2, '0') + '-' +
+    String(ahora.getDate()).padStart(2, '0') + ' ' +
+    String(ahora.getHours()).padStart(2, '0') + ':' +
+    String(ahora.getMinutes()).padStart(2, '0') + ':' +
+    String(ahora.getSeconds()).padStart(2, '0');
+  
+  const datos = {
+    id_provincia: parseInt(localStorage.getItem('idProvincia')),
+    nom_usuario: userName.value,
+    velocidad_bajada_mbps: velocidad,
+    ping_ms: latencia,
+    nivel_conexion: nivel,
+    fecha_test: fechaLocal
+  };
 
+  try {
     const response = await fetch('http://localhost:3000/registrar-test', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(datos)
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(datos)
     });
-    
-    const result = await response.json();
+    await response.json();
+    console.log("Resultados guardados con éxito en MySQL.");
+  } catch (error) {
+    console.error("Error al guardar en base de datos:", error);
+  }
 };
 
 const startTest = async () => {
@@ -151,7 +166,7 @@ const startTest = async () => {
     speed.value = speedMbps;
     ping.value = msPing;
     
-    enviarReporte(speedMbps, getStatus(speedMbps).label, msPing);
+    // enviarReporte(speedMbps, getStatus(speedMbps).label, msPing);
     enviarResultados(speedMbps, msPing, getStatus(speedMbps).label);
 
     emit('test-complete', {
