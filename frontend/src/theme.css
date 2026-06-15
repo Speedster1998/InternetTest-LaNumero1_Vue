@@ -156,9 +156,10 @@ button:disabled {
     padding-top: 0.5vh;
   }
   .container.container-map {
+    max-height: 85%;
     max-width: 100%;
-    width: 100%;
-    border-radius: 0;
+    width: 92%;
+    border-radius: 15px;
     height: calc(100vh - 70px);
     padding: 0.8rem;
   }
@@ -176,12 +177,14 @@ button:disabled {
     padding: 1.6rem;
     width: 92%;
   }
-
+  .container.container-large{
+    max-width: 1000px !important;
+  }
   .dashboard-view {
     align-items: stretch !important;
   }
-
   .container.container-map {
+    max-width: 600px !important;
     padding: 1.2rem;
   }
 }

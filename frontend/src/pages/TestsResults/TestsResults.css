@@ -1,11 +1,14 @@
 .resultados-view{
   background: transparent;
   width: 100%;
-  max-width: 1000px; /* Tope máximo para pantallas ultra anchas */
+  max-width: 1000px;
   margin: 0 auto; /* Centra todo el bloque en la pantalla */
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-sizing: border-box;
+  flex: 1;
+  min-height: 0;
 }
 
 .resultados-title {
@@ -28,8 +31,7 @@
 
 .table-wrapper {
   width: 100%;
-  max-width: 1000px;
-  max-height: 65vh;
+  max-width: 100%;
   background: white;
   overflow-x: auto;
   overflow-y: auto;
@@ -38,6 +40,8 @@
   border-radius: 15px;
   box-shadow: 0 10px 15px -5px rgba(0, 0, 0, 0.3);
   transform: translateZ(0);
+  box-sizing: border-box;
+  min-height: 0;
 }
 
 .resultados-table {
@@ -91,10 +95,10 @@
   display: inline-block;
 }
 
-.status-low { background-color: #fee2e2; color: #dc2626; border: 1px solid #fecaca; }
-.status-mod { background-color: #fef08a; color: #ca8a04; border: 1px solid #fde047; }
-.status-opt { background-color: #dcfce7; color: #16a34a; border: 1px solid #bbf7d0; }
-.status-exc { background-color: #ddedf0; color: #328df4; border: 1px solid #aeeaf5; }
+.status-lower { background-color: #fee2e2; color: #dc2626; border: 1px solid #fecaca; }
+.status-moderate { background-color: #fef08a; color: #ca8a04; border: 1px solid #fde047; }
+.status-optime { background-color: #dcfce7; color: #16a34a; border: 1px solid #bbf7d0; }
+.status-excelent { background-color: #ddedf0; color: #328df4; border: 1px solid #aeeaf5; }
 
 /* Spinner de carga */
 .spinner {

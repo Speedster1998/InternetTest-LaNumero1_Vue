@@ -1,9 +1,14 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import '../Settings/Settings.css';
 
 const mode = ref(localStorage.getItem('testMode') || 'both'); // 'manual' o 'both'
 const interval = ref(parseInt(localStorage.getItem('testInterval')) || 60); // En minutos
+
+const isAutoEnabled = computed({
+  get: () => mode.value === 'both',
+  set: (val) => { mode.value = val ? 'both' : 'manual'; }
+});
 
 watch([mode, interval], (newValues) => {
   const [newMode, newInterval] = newValues; // Desestructuramos para ver qué llega
@@ -37,17 +42,20 @@ const saveConfig = () => {
   <div class="settings-view">
     <h1>Configuración del Sistema</h1>
     
-    <div class="setting-group">
-      <label>Modo de Ejecución:</label>
-      <select v-model="mode">
-        <option value="both">Manual y Automático</option>
-        <option value="manual">Solo Manual</option>
-      </select>
+    <div class="setting-group switch-group">
+      <label class="switch-label">Modo de Test Automático:</label>
+      <div class="switch-wrapper">
+        <span class="status-text">{{ isAutoEnabled ? 'Activado' : 'Desactivado' }}</span>
+        <label class="switch">
+          <input type="checkbox" v-model="isAutoEnabled">
+          <span class="slider round"></span>
+        </label>
+      </div>
     </div>
 
-    <div v-if="mode === 'both'" class="setting-group">
+    <div class="setting-group" :class="{ disabled: !isAutoEnabled }">
       <label>Frecuencia del Test Automático:</label>
-      <select v-model.number="interval">
+      <select v-model.number="interval" :disabled="!isAutoEnabled">
         <option value="1">Cada minuto</option>
         <option value="10">Cada 10 minutos</option>
         <option value="30">Cada 30 minutos</option>

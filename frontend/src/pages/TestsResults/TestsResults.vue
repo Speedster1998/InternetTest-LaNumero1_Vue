@@ -28,10 +28,10 @@ onMounted(() => {
 const getStatusClass = (nivel) => {
   if (!nivel) return '';
   const n = nivel.toLowerCase();
-  if (n.includes('excelente')) return 'status-exc';
-  if (n.includes('óptima') || n.includes('optima')) return 'status-opt';
-  if (n.includes('moderada')) return 'status-mod';
-  if (n.includes('baja')) return 'status-low';
+  if (n.includes('excelente')) return 'status-excelent';
+  if (n.includes('óptima') || n.includes('optima')) return 'status-optime';
+  if (n.includes('moderada')) return 'status-moderate';
+  if (n.includes('baja')) return 'status-lower';
   return '';
 };
 
