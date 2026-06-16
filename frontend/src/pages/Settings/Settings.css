@@ -168,12 +168,20 @@ select:focus {
 .status-text {
   font-weight: bold;
   font-size: 1rem;
-  color: #0070f3;
   min-width: 95px;
   text-align: right;
   margin: 0;
   padding-right: 8px;
   line-height: 1;
+}
+
+.status-on {
+  color: #0070f3;
+  transition: color 0.3s ease;
+}
+.status-off {
+  color: #777;
+  transition: color 0.3s ease;
 }
 
 /* El interruptor (caja principal) */

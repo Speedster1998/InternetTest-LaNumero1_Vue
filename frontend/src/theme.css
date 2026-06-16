@@ -38,7 +38,7 @@ body {
 
 
 h1{
-  font-size: 32pt;
+  font-size: 30pt;
   color: #333;
   line-height: 1.2;
   margin-top: 3px;
@@ -93,7 +93,7 @@ a:hover{
 }
 
 .container.container-large {
-  max-width: 1050px;
+  max-width: 1065px;
   width: 95%;
 }
 
@@ -178,7 +178,7 @@ button:disabled {
     width: 92%;
   }
   .container.container-large{
-    max-width: 1000px !important;
+    max-width: 1040px !important;
   }
   .dashboard-view {
     align-items: stretch !important;

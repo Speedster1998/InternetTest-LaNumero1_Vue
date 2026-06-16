@@ -10,6 +10,11 @@ const isAutoEnabled = computed({
   set: (val) => { mode.value = val ? 'both' : 'manual'; }
 });
 
+// Cambio de color del status-text
+const statusClass = computed(() => {
+  return isAutoEnabled.value ? 'status-on' : 'status-off';
+});
+
 watch([mode, interval], (newValues) => {
   const [newMode, newInterval] = newValues; // Desestructuramos para ver qué llega
   
@@ -45,7 +50,7 @@ const saveConfig = () => {
     <div class="setting-group switch-group">
       <label class="switch-label">Modo de Test Automático:</label>
       <div class="switch-wrapper">
-        <span class="status-text">{{ isAutoEnabled ? 'Activado' : 'Desactivado' }}</span>
+        <span :class="['status-text', statusClass]">{{ isAutoEnabled ? 'Activado' : 'Desactivado' }}</span>
         <label class="switch">
           <input type="checkbox" v-model="isAutoEnabled">
           <span class="slider round"></span>

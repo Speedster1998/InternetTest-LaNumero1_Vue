@@ -232,7 +232,9 @@ watch(isRegistered, (newValue) => {
   <div class="container" :class="{ 'dashboard-mode': isRegistered }">
     <div class="dashboard-view">
       <div class="test-screen">
-        <h1 class="internettest-title">Test de Internet</h1>
+        <h1 class="test-title">
+          INTERNET<v-icon name="md-speed" class="test-icon" scale="2.8"/><span>TEST</span>
+        </h1>
         <p><strong>Hola {{ userName }}</strong></p>
         <p>Haga click en el botón para verificar tu conexión actual.</p>
         

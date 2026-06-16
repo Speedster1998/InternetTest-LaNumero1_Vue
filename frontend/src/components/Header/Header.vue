@@ -44,7 +44,7 @@ const confirmLogout = () => {
 
         <nav :class="['sidebar-menu', { 'is-open': isOpenMenu }]" ref="menuRef">
           <div class="sidebar-header">
-            <img src="/La_Numero_1_logo_negro.png" alt="Logo" class="sidebar-logo" />
+            <img src="/InternetTest-logo_negro.png" alt="Logo" class="sidebar-logo"/>
             <button class="close-btn" @click="isOpenMenu = false">&times;</button>
           </div>
 

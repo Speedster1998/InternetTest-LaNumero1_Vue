@@ -1,5 +1,21 @@
-.internettest-title{
-  color: #006deb;
+.test-title{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 350;
+  letter-spacing: 0.02rem;
+  color: rgb(49, 49, 49);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.test-title span{
+  font-weight: 500;
+}
+
+.test-icon{
+  opacity: 0.9;
+  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.05));
 }
 
 .result {

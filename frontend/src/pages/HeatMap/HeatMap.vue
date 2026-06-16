@@ -23,27 +23,7 @@ const cargarPuntosDeCalor = async () => {
     
     if (map.value && datosReales.length > 0) {
       await import('leaflet.heat');
-
-      /*
-      // Parche para simpleheat: aumentar el padding del canvas y evitar el borde/mancha cuadrado (artefacto visual)
-      if (window.simpleheat) {
-        window.simpleheat.prototype.radius = function (t, i) {
-          i = i || 15;
-          var a = this._circle = document.createElement("canvas"),
-              s = a.getContext("2d"),
-              e = this._r = t + i + (i); // Padding extra igual al blur (i) para evitar cortes
-          a.width = a.height = 2 * e;
-          s.shadowOffsetX = s.shadowOffsetY = 200;
-          s.shadowBlur = i;
-          s.shadowColor = "black";
-          s.beginPath();
-          s.arc(e - 200, e - 200, t, 0, 2 * Math.PI, !0);
-          s.closePath();
-          s.fill();
-          return this;
-        };
-      }*/
-
+      
       // 1. BUSCADOR INTELIGENTE DE SEDE
       const infoSedeUsuario = datosReales.find(row => {
         const nombreLugar = row.lugar ? row.lugar.toLowerCase() : '';
@@ -117,6 +97,29 @@ onUnmounted(() => {
   <div class="map-view">
     <h1>Cobertura Geográfica</h1>
     <p class="subtitle">Monitoreo en tiempo real de la calidad de conexión por sedes</p>
-    <div id="map" class="map-container"></div>
+    <div class="map-wrapper">
+      <div id="map" class="map-container"></div>
+      
+      <!-- Leyenda del Mapa de Calor -->
+      <div class="heatmap-legend">
+        <h4>Leyenda de Red</h4>
+        <div class="legend-item">
+          <span class="color-box" style="background: rgba(0, 0, 255, 0.6);"></span>
+          <span>Excelente (>100 Mbps)</span>
+        </div>
+        <div class="legend-item">
+          <span class="color-box" style="background: rgba(0, 250, 250, 0.7);"></span>
+          <span>Óptima (50 - 100 Mbps)</span>
+        </div>
+        <div class="legend-item">
+          <span class="color-box" style="background: rgb(253, 210, 10);"></span>
+          <span>Moderada (20 - 50 Mbps)</span>
+        </div>
+        <div class="legend-item">
+          <span class="color-box" style="background: red;"></span>
+          <span>Lenta (&lt;20 Mbps)</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
