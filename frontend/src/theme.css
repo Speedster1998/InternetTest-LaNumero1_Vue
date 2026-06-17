@@ -152,6 +152,9 @@ button:disabled {
 
 /* --- DISEÑO RESPONSIVO (Móviles / Laptops 14") --- */
 @media (max-width: 480px) {
+  h1{
+    font-size: 23pt;
+  }
   #app {
     padding-top: 0.5vh;
   }
@@ -161,13 +164,13 @@ button:disabled {
     width: 92%;
     border-radius: 15px;
     height: calc(100vh - 70px);
-    padding: 0.8rem;
+    padding: 1.2rem;
   }
 }
 
 @media (max-height: 768px) {
   h1 {
-    font-size: 26pt !important;
+    font-size: 22pt !important;
   }
   img {
     max-width: 185px !important;

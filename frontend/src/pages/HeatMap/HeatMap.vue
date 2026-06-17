@@ -7,6 +7,11 @@ import '../HeatMap/HeatMap.css';
 
 const map = ref(null);
 const heatLayer = ref(null); 
+const isLegendOpen = ref(true);
+
+const toggleLegend = () => {
+  isLegendOpen.value = !isLegendOpen.value;
+};
 
 // Vista general de todo Perú
 const coordenadasPeru = [-9.19, -75.015];
@@ -100,24 +105,40 @@ onUnmounted(() => {
     <div class="map-wrapper">
       <div id="map" class="map-container"></div>
       
-      <!-- Leyenda del Mapa de Calor -->
-      <div class="heatmap-legend">
-        <h4>Leyenda de Red</h4>
-        <div class="legend-item">
-          <span class="color-box" style="background: rgba(0, 0, 255, 0.6);"></span>
-          <span>Excelente (>100 Mbps)</span>
+      <!-- Botón flotante para abrir leyenda -->
+      <button 
+        v-if="!isLegendOpen" 
+        class="legend-fab" 
+        @click="toggleLegend" 
+        title="Mostrar Leyenda">
+        <v-icon name="ai-acclaim" scale="1.1" />
+      </button>
+
+      <!-- Panel de Leyenda del Mapa de Calor -->
+      <div v-else class="heatmap-legend">
+        <div class="legend-header" @click="toggleLegend" title="Minimizar leyenda">
+          <h4>Leyenda de Red</h4>
+          <button class="toggle-btn">
+            <v-icon name="fa-chevron-down" scale="0.9" />
+          </button>
         </div>
-        <div class="legend-item">
-          <span class="color-box" style="background: rgba(0, 250, 250, 0.7);"></span>
-          <span>Óptima (50 - 100 Mbps)</span>
-        </div>
-        <div class="legend-item">
-          <span class="color-box" style="background: rgb(253, 210, 10);"></span>
-          <span>Moderada (20 - 50 Mbps)</span>
-        </div>
-        <div class="legend-item">
-          <span class="color-box" style="background: red;"></span>
-          <span>Lenta (&lt;20 Mbps)</span>
+        <div class="legend-content">
+          <div class="legend-item">
+            <span class="color-box" style="background: rgba(0, 0, 255, 0.6);"></span>
+            <span>Excelente (>100 Mbps)</span>
+          </div>
+          <div class="legend-item">
+            <span class="color-box" style="background: rgba(0, 250, 250, 0.7);"></span>
+            <span>Óptima (50 - 100 Mbps)</span>
+          </div>
+          <div class="legend-item">
+            <span class="color-box" style="background: rgb(253, 210, 10);"></span>
+            <span>Moderada (20 - 50 Mbps)</span>
+          </div>
+          <div class="legend-item">
+            <span class="color-box" style="background: red;"></span>
+            <span>Lenta (&lt;20 Mbps)</span>
+          </div>
         </div>
       </div>
     </div>

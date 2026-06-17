@@ -12,7 +12,9 @@ import {
   BiTable,
   BiWindow,
   MdDesktopwindows,
-  MdSettings 
+  MdSettings,
+  AiAcclaim,
+  FaChevronDown
 } from "oh-vue-icons/icons";
 
 addIcons(
@@ -23,7 +25,9 @@ addIcons(
   BiTable,
   BiWindow,
   MdDesktopwindows,
-  MdSettings
+  MdSettings,
+  AiAcclaim,
+  FaChevronDown
 );
 
 const app = createApp(App)
