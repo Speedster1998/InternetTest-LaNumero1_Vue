@@ -118,7 +118,7 @@ app.get('/resultados', function(req, res) {
             m.ping_ms, 
             m.nivel_conexion,
             m.fecha_hora,
-            u.lugar as sede
+            CONCAT(u.cod_ubi, ' - ', u.lugar) as sede
         FROM monitoreo_conexion m
         LEFT JOIN ubicacion u ON m.id_provincia = u.id_ubicacion
         ORDER BY m.id_provincia DESC 
