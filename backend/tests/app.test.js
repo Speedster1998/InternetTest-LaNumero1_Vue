@@ -10,8 +10,8 @@ process.env.DB_NAME = process.env.DB_NAME || 'ci_db';
 const app = require('../index');
 
 describe('Backend API', () => {
-  it('GET / responde con mensaje de salud', async () => {
-    const response = await request(app).get('/');
+  it('GET /api/health responde con mensaje de salud', async () => {
+    const response = await request(app).get('/api/health');
 
     assert.equal(response.status, 200);
     assert.match(response.text, /Backend de La Número 1/i);

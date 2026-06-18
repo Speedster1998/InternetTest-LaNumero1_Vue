@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue';
 import L from 'leaflet';
+import { apiUrl } from '../../config/api';
 import 'leaflet/dist/images/marker-shadow.png'; 
 import 'leaflet/dist/leaflet.css';
 import '../HeatMap/HeatMap.css';
@@ -23,7 +24,7 @@ const cargarPuntosDeCalor = async () => {
     const sedeActual = localStorage.getItem('baseNumber') || localStorage.getItem('user_base') || 'OFC - Lima';
     console.log("Buscando en el mapa la sede activa:", sedeActual);
 
-    const response = await fetch(`http://localhost:3000/obtener-coordenadas?sede=${encodeURIComponent(sedeActual)}`);
+    const response = await fetch(`${apiUrl('/obtener-coordenadas')}?sede=${encodeURIComponent(sedeActual)}`);
     const datosReales = await response.json();
     
     if (map.value && datosReales.length > 0) {

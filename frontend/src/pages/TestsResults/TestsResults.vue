@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
+import { apiUrl } from '../../config/api';
 import './TestsResults.css';
 
 const resultados = ref([]);
@@ -12,7 +13,7 @@ const selectedSede = ref('all');
 
 const fetchResultados = async () => {
   try {
-    const response = await fetch('http://localhost:3000/resultados');
+    const response = await fetch(apiUrl('/resultados'));
     const data = await response.json();
     resultados.value = data.sort((a, b) => new Date(b.fecha_hora) - new Date(a.fecha_hora));
   } catch (error) {

@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import '../InternetTest/InternetTest.css';
+import { apiUrl } from '../../config/api';
 import techImg from '/src/Images/abstract_tech.jpg';
 import { useRegisterSW } from 'virtual:pwa-register/vue'
 useRegisterSW()
@@ -128,7 +129,7 @@ const enviarResultados = async (velocidad, latencia, nivel) => {
   };
 
   try {
-    const response = await fetch('http://localhost:3000/registrar-test', {
+    const response = await fetch(apiUrl('/registrar-test'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(datos)

@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { apiUrl } from '../../config/api';
 import '../Login/Login.css';
 
 const router = useRouter();
@@ -13,7 +14,7 @@ const sedes = ref([]);
 
 onMounted(async () => {
   try {
-    const response = await fetch('http://localhost:3000/sedes');
+    const response = await fetch(apiUrl('/sedes'));
     if (response.ok) {
       sedes.value = await response.json();
     } else {

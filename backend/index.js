@@ -2,8 +2,10 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2');
+const path = require('path');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
+const publicDir = path.join(__dirname, 'public');
 
 app.use(express.json());
 app.use(cors());
@@ -24,7 +26,7 @@ db.connect((err) => {
     console.log('Conexión exitosa a la base de datos de La Número 1');
 });
 
-app.get('/', function(req, res) {
+app.get('/api/health', function(req, res) {
   res.send('¡Backend de La Número 1 funcionando con éxito!');
 });
 
@@ -129,6 +131,17 @@ app.get('/resultados', function(req, res) {
             return res.status(500).json({ error: "Error en la base de datos" });
         }
         res.json(rows);
+    });
+});
+
+app.use(express.static(publicDir));
+
+app.get(/.*/, function(req, res, next) {
+    if (req.path.includes('.')) {
+        return next();
+    }
+    res.sendFile(path.join(publicDir, 'index.html'), (err) => {
+        if (err) next(err);
     });
 });
 
