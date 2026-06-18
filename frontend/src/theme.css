@@ -93,8 +93,12 @@ a:hover{
 }
 
 .container.container-large {
-  max-width: 1065px;
-  width: 95%;
+  max-width: min(1400px, calc(100vw - 32px));
+  width: min(98vw, 1400px);
+  height: calc(100vh - 90px);
+  max-height: none;
+  padding: clamp(1rem, 2vw, 1.8rem);
+  align-items: stretch;
 }
 
 .container.dashboard-mode {
@@ -180,8 +184,11 @@ button:disabled {
     padding: 1.6rem;
     width: 92%;
   }
-  .container.container-large{
-    max-width: 1040px !important;
+  .container.container-large {
+    max-width: calc(100vw - 24px) !important;
+    width: calc(100vw - 24px) !important;
+    height: calc(100vh - 80px);
+    padding: 1rem;
   }
   .dashboard-view {
     align-items: stretch !important;

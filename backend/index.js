@@ -121,8 +121,7 @@ app.get('/resultados', function(req, res) {
             CONCAT(u.cod_ubi, ' - ', u.lugar) as sede
         FROM monitoreo_conexion m
         LEFT JOIN ubicacion u ON m.id_provincia = u.id_ubicacion
-        ORDER BY m.id_provincia DESC 
-        LIMIT 100
+        ORDER BY m.fecha_hora DESC, m.id_monitoreo DESC
     `;
     db.query(query, (err, rows) => {
         if (err) {
@@ -133,6 +132,10 @@ app.get('/resultados', function(req, res) {
     });
 });
 
-app.listen(port, '0.0.0.0', () => {
-  console.log(`Servidor de InternetTest corriendo en el puerto ${port}`);
-});
+if (require.main === module) {
+    app.listen(port, '0.0.0.0', () => {
+        console.log(`Servidor de InternetTest corriendo en el puerto ${port}`);
+    });
+}
+
+module.exports = app;
