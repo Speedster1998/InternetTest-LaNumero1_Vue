@@ -46,7 +46,7 @@ const router = createRouter({
   routes
 });
 
-/* --- GUARD DE SEGURIDAD (Middleware) --- */
+/* --- GUARDIA DE SEGURIDAD (Middleware) --- */
 router.beforeEach((to, from, next) => {
   const isRegistered = !!localStorage.getItem('userName');
 

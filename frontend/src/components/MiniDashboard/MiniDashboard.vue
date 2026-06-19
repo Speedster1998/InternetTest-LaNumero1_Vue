@@ -40,7 +40,7 @@ const horaActual = computed(() => new Date().toLocaleTimeString([], { hour: '2-d
 </template>
 
 <script>
-import { ref, createApp } from 'vue';
+import { ref, createApp, h } from 'vue';
 import techImg from '/src/Images/abstract_tech.jpg';
 import MiniDashboard from './MiniDashboard.vue'; // Se importa a sí mismo como componente procesado
 
@@ -58,9 +58,8 @@ const latestData = ref({
 export const toggleMiniDashboard = (data) => {
   if (data) {
     latestData.value = data;
-    // Si la ventana ya existe y está viva, actualizamos sus props reactivas al vuelo
+    // Si la ventana ya existe y está viva, dejamos que la reactividad del wrapper actualice los datos
     if (miniWindowInstance && miniWindowRef && !miniWindowRef.closed) {
-      Object.assign(miniWindowInstance._instance.props, data);
       return miniWindowRef;
     }
   }
@@ -174,12 +173,16 @@ export const toggleMiniDashboard = (data) => {
 
       if (miniWindowInstance) miniWindowInstance.unmount();
 
-      // Montamos el componente MiniDashboard compilado de verdad pasándole las variables de inicio
-      miniWindowInstance = createApp(MiniDashboard, {
-        speed: latestData.value.speed,
-        ping: latestData.value.ping,
-        statusLabel: latestData.value.statusLabel,
-        statusClass: latestData.value.statusClass
+      // Montamos el componente MiniDashboard compilado de verdad pasándole las variables reaccionando al wrapper
+      miniWindowInstance = createApp({
+        render() {
+          return h(MiniDashboard, {
+            speed: latestData.value.speed,
+            ping: latestData.value.ping,
+            statusLabel: latestData.value.statusLabel,
+            statusClass: latestData.value.statusClass
+          });
+        }
       });
       
       miniWindowInstance.mount(containerDiv);
