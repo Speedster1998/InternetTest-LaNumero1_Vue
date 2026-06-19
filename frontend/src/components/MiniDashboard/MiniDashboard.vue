@@ -25,17 +25,17 @@ const horaActual = computed(() => new Date().toLocaleTimeString([], { hour: '2-d
     <div class="dashboard-container">
       <div class="speed-section">
         <div class="label">Velocidad Actual</div>
-        <div class="value">{{ speed || '--' }} <small style="font-size:1.1rem">Mbps</small></div>
+        <div class="value" id="md-speed">{{ speed || '--' }} <small style="font-size:1.1rem">Mbps</small></div>
       </div>
       <div class="info-section">
         <div class="label">Latencia (Ping)</div>
-        <div class="ping">{{ ping || '--' }} ms</div>
-        <div class="status" :style="{ backgroundColor: colors.bg, color: colors.text }">
+        <div class="ping" id="md-ping">{{ ping || '--' }} ms</div>
+        <div class="status" id="md-status" :style="{ backgroundColor: colors.bg, color: colors.text }">
           {{ statusLabel || 'Sin datos' }}
         </div>
       </div>
     </div>
-    <div class="footer">Actualizado: {{ horaActual }}</div>
+    <div class="footer" id="md-time">Actualizado: {{ horaActual }}</div>
   </div>
 </template>
 
@@ -58,8 +58,37 @@ const latestData = ref({
 export const toggleMiniDashboard = (data) => {
   if (data) {
     latestData.value = data;
-    // Si la ventana ya existe y está viva, dejamos que la reactividad del wrapper actualice los datos
+    
+    // Si la ventana ya existe y está viva, usamos Vanilla JS para actualizar el DOM directamente
     if (miniWindowInstance && miniWindowRef && !miniWindowRef.closed) {
+      const subDoc = miniWindowRef.document;
+      if (!subDoc) return miniWindowRef;
+      
+      const speedEl = subDoc.getElementById('md-speed');
+      if (speedEl) speedEl.innerHTML = `${data.speed || '--'} <small style="font-size:1.1rem">Mbps</small>`;
+      
+      const pingEl = subDoc.getElementById('md-ping');
+      if (pingEl) pingEl.innerText = `${data.ping || '--'} ms`;
+      
+      const statusEl = subDoc.getElementById('md-status');
+      if (statusEl) {
+        statusEl.innerText = data.statusLabel || 'Sin datos';
+        const cMap = {
+          'status-low': { bg: '#f8d7da', text: '#721c24' },
+          'status-mod': { bg: '#fff3cd', text: '#856404' },
+          'status-opt': { bg: '#d4edda', text: '#155724' },
+          'status-exc': { bg: '#d1ecf1', text: '#328df4' }
+        };
+        const colors = cMap[data.statusClass] || { bg: '#e2e3e5', text: '#383d41' };
+        statusEl.style.backgroundColor = colors.bg;
+        statusEl.style.color = colors.text;
+      }
+      
+      const timeEl = subDoc.getElementById('md-time');
+      if (timeEl) {
+        timeEl.innerText = `Actualizado: ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+      }
+      
       return miniWindowRef;
     }
   }
