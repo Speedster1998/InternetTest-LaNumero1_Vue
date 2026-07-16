@@ -69,14 +69,18 @@ const setupAutoTest = () => {
   }
 };
 
+// Medición WAN vía Cloudflare Speed Test (CORS abierto, tamaño exacto, estable en producción)
+const SPEED_TEST_BASE = 'https://speed.cloudflare.com/__down';
+const WARMUP_BYTES = 1_000_000;   // 1 MB
+const MEASURE_BYTES = 10_000_000; // 10 MB
+
 const measurePing = async () => {
+  const url = `${SPEED_TEST_BASE}?bytes=10&r=${Date.now()}`;
   const start = performance.now();
   try {
-    await fetch("https://www.google.com/favicon.ico?cache-bust=" + start, { 
-      method: 'HEAD', mode: 'no-cors', cache: 'no-cache' 
-    });
-    const end = performance.now();
-    const resultPing = Math.round(end - start);
+    const response = await fetch(url, { cache: 'no-store' });
+    await response.arrayBuffer();
+    const resultPing = Math.round(performance.now() - start);
     ping.value = resultPing;
     return resultPing;
   } catch (e) {
@@ -151,7 +155,7 @@ const startTest = async () => {
     loadingText.value = "Estabilizando conexión..."; 
     await new Promise(resolve => setTimeout(resolve, 50));
     await measurePing(); 
-    await runSingleSpeedTest(); 
+    await runSingleSpeedTest(WARMUP_BYTES); 
 
     // Pequeña pausa de 500ms para evitar colisiones de paquetes
     await new Promise(resolve => setTimeout(resolve, 500));
@@ -160,7 +164,7 @@ const startTest = async () => {
     loadingText.value = "Midiendo velocidad real...";
     await new Promise(resolve => setTimeout(resolve, 50));
     const msPing = await measurePing();
-    const speedMbps = await runSingleSpeedTest();
+    const speedMbps = await runSingleSpeedTest(MEASURE_BYTES);
 
     // --- PASO 3: RESULTADOS Y REPORTE ---
     speed.value = speedMbps;
@@ -184,17 +188,22 @@ const startTest = async () => {
   }
 };
 
-// --- FUNCIÓN DE APOYO: LA MEDICIÓN PURA ---
-const runSingleSpeedTest = async () => {
-  const testImage = "https://source.unsplash.com/random/4000x4000?" + Date.now();
-  const estimatedSizeInMbits = 16; 
+// --- FUNCIÓN DE APOYO: LA MEDICIÓN PURA (WAN) ---
+const runSingleSpeedTest = async (bytes = MEASURE_BYTES) => {
+  const url = `${SPEED_TEST_BASE}?bytes=${bytes}&r=${Date.now()}`;
   const startTime = performance.now();
-  
-  await fetch(testImage, { mode: 'no-cors', cache: 'no-store' });
-  
-  const endTime = performance.now();
-  const durationInSeconds = (endTime - startTime) / 1000;
-  return (estimatedSizeInMbits / durationInSeconds).toFixed(2);
+
+  const response = await fetch(url, { cache: 'no-store' });
+  if (!response.ok) {
+    throw new Error(`Speed test HTTP ${response.status}`);
+  }
+
+  const data = await response.arrayBuffer();
+  const durationInSeconds = (performance.now() - startTime) / 1000;
+  if (durationInSeconds <= 0) return '0.00';
+
+  const megabits = (data.byteLength * 8) / 1_000_000;
+  return (megabits / durationInSeconds).toFixed(2);
 };
 
 onMounted(() => {
