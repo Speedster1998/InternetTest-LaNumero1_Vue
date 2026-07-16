@@ -8,15 +8,19 @@ const port = 3000;
 app.use(express.json());
 app.use(cors());
 
-const db = mysql.createConnection({
+const db = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASS,
     database: process.env.DB_NAME,
+    waitForConnections: true,
+    connectionLimit: 10,
+    enableKeepAlive: true,
+    keepAliveInitialDelay: 10000,
 });
 
-// Test de conexión al MySQL
-db.connect((err) => {
+// Test de conexión al MySQL (el pool conecta al primer query)
+db.query('SELECT 1', (err) => {
     if (err) {
         console.error('Error conectando a MySQL:', err);
         return;
